@@ -19,17 +19,19 @@ public class GameUI : MonoBehaviour {
 
 	public void SaveAndBackToMenu() {
 		Debug.Log ("Save state");
-		GameState.gameState.SaveState ();
+		GameController.gameState.SaveState ();
 		Debug.Log ("Back to main menu");
 		SceneManager.LoadScene (mainMenuScene);
 	}
 
 	public void ShowDetailView() {
-		detailView.transform.position = new Vector2 (0, 0);
+		var rectTransform = detailView.GetComponent<RectTransform> ();
+		rectTransform.anchoredPosition = new Vector2 (0, 0);
 	}
 
 	public void HideDetailView() {
 		detailView.transform.localPosition = detailViewOriginalPosition;
-		GameState.gameState.selectedOrgan = null;
+		GameController.gameState.selectedOrgan.isSelecting = false;
+		GameController.gameState.selectedOrgan = null;
 	}
 }

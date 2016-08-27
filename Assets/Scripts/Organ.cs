@@ -8,10 +8,13 @@ public class Organ : MonoBehaviour {
 	public string name;
 	public Vector2 selectedScale;
 	public Color selectedColor;
-	public bool isTouched = false;
+	public bool isSelecting = false;
+	public SpriteRenderer spriteRenderer;
+	public int nbDetectedTumor;
+	public int nbDetectedForeignBody;
+	public int nbDetectedVirus;
 
 	private PolygonCollider2D collider2D;
-	private SpriteRenderer spriteRenderer;
 	private GameUI gameUI;
 
 	void Start () {
@@ -21,23 +24,25 @@ public class Organ : MonoBehaviour {
 	}
 
 	void Update () {
-		// Handle touching organ
+		// Handle organ selection
 		if (Input.touchCount == 1) {
 			var touch = Input.GetTouch (0);
-			if (!isTouched && touch.phase == TouchPhase.Began) {
+			if (touch.phase == TouchPhase.Began || 
+				touch.phase == TouchPhase.Moved) {
 				var point = Camera.main.ScreenToWorldPoint (touch.position);
 				if (collider2D.OverlapPoint (point)) {
-					Debug.Log ("Touched organ: " + name);
-					isTouched = true;
+					foreach (var organ in GameController.gameState.organs) {
+						organ.isSelecting = false;
+					}
+					isSelecting = true;
 				}
-			} else if (isTouched && touch.phase == TouchPhase.Ended) {
-				isTouched = false;
-				GameState.gameState.selectedOrgan = this;
+			} else if (isSelecting && touch.phase == TouchPhase.Ended) {
+				GameController.gameState.selectedOrgan = this;
 				gameUI.ShowDetailView ();
 			}
 		}
-
-		if (isTouched) {
+			
+		if (isSelecting) {
 			spriteRenderer.color = selectedColor;
 			spriteRenderer.transform.localScale = selectedScale;
 		} else {

@@ -10,19 +10,19 @@ public class MainMenu : MonoBehaviour {
 	private Vector3 settingsPanelOriginalPosition;
 
 	public void Start() {
-		GameState.gameState.LoadSettings ();
+		GameController.gameState.LoadSettings ();
 		settingsPanelOriginalPosition = settingsPanel.transform.localPosition;
 	}
 
 	public void NewGame() {
 		Debug.Log ("New game");
-		GameState.gameState.Initialize ();
+		GameController.gameState.Initialize ();
 		SceneManager.LoadScene (gameScene);
 	}
 
 	public void ContinueGame() {
 		Debug.Log ("Continue game");
-		GameState.gameState.LoadState ();
+		GameController.gameState.LoadState ();
 		SceneManager.LoadScene (gameScene);	
 	}
 
@@ -32,13 +32,13 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void CancelSettings() {
-		GameState.gameState.LoadSettings ();
+		GameController.gameState.LoadSettings ();
 		Debug.Log ("Cancel settings");
 		settingsPanel.transform.localPosition = settingsPanelOriginalPosition;
 	}
 
 	public void ApplySettings() {
-		GameState.gameState.SaveSettings ();
+		GameController.gameState.SaveSettings ();
 		Debug.Log ("Apply settings");
 		settingsPanel.transform.localPosition = settingsPanelOriginalPosition;
 	}

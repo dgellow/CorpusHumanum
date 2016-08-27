@@ -1,21 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameState : MonoBehaviour {
-	public static GameState gameState;
+public class GameController : MonoBehaviour {
+	public static GameController gameState;
 	public Organ[] organs;
 	public Organ selectedOrgan;
 
-	void Start () {
+	void Awake() {
 		if (gameState == null) {
-			gameState = this;
 			DontDestroyOnLoad (gameObject);
+			gameState = this;
+
+			organs = FindObjectsOfType<Organ> ();
 		} else if (gameState != this) {
 			Destroy (gameState);
 		}
-
-		organs = FindObjectsOfType<Organ> ();
 	}
+
+
 
 	public void Initialize() {
 		Debug.Log ("Initialize game state");
