@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameState : MonoBehaviour {
 	public static GameState gameState;
+	public Organ[] organs;
+	public Organ selectedOrgan;
 
 	void Start () {
 		if (gameState == null) {
@@ -11,6 +13,8 @@ public class GameState : MonoBehaviour {
 		} else if (gameState != this) {
 			Destroy (gameState);
 		}
+
+		organs = FindObjectsOfType<Organ> ();
 	}
 
 	public void Initialize() {
