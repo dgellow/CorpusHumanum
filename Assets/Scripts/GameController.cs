@@ -5,6 +5,12 @@ public class GameController : MonoBehaviour {
 	public static GameController gameState;
 	public Organ[] organs;
 	public Organ selectedOrgan;
+	public int incomeRate = 10;
+	public int incomeAmount = 5;
+	public int maxIncome = 1000;
+	public int minIncome = 0;
+	public bool generateIncome = true;
+	public int incomeReserve = 0;
 
 	void Awake() {
 		if (gameState == null) {
@@ -17,10 +23,9 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-
-
 	public void Initialize() {
 		Debug.Log ("Initialize game state");
+		StartCoroutine (IncomeGenerator ());
 	}
 
 	public void LoadState() {
@@ -37,5 +42,30 @@ public class GameController : MonoBehaviour {
 
 	public void SaveSettings() {
 		Debug.Log ("Save settings");
+	}
+
+	public void GiveToIncomeReserve(int amount) {
+		incomeReserve += amount;
+		if (incomeReserve > maxIncome) {
+			incomeReserve = maxIncome;
+		}
+	}
+
+	public void TakeFromIncomeReserve(int amount) {
+		incomeReserve -= amount;
+		if (incomeReserve < minIncome) {
+			incomeReserve = minIncome;
+		}
+	}
+
+	IEnumerator IncomeGenerator() {
+		// Infinite loop
+		while (true) {
+			if (generateIncome) {
+				Debug.Log ("Generate income");
+				GiveToIncomeReserve (incomeAmount);
+			}
+			yield return new WaitForSeconds (incomeRate);
+		}
 	}
 }

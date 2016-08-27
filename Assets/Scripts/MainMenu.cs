@@ -15,13 +15,12 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void NewGame() {
-		Debug.Log ("New game");
 		GameController.gameState.Initialize ();
 		SceneManager.LoadScene (gameScene);
 	}
 
 	public void ContinueGame() {
-		Debug.Log ("Continue game");
+		GameController.gameState.Initialize ();
 		GameController.gameState.LoadState ();
 		SceneManager.LoadScene (gameScene);	
 	}
