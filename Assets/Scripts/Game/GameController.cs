@@ -76,20 +76,26 @@ public class GameController : MonoBehaviour {
 			Debug.Log ("updating combat");
 			foreach (var o in organs) {
 				var attackForce = 0f;
-				foreach (var a in o.allies) {
-					attackForce = attackForce + a.damages;
+				if (o.allies != null) {
+					foreach (var a in o.allies) {
+						attackForce = attackForce + a.damages;
+					}
+					attackForce = o.allies.Count * attackScale * attackForce;
 				}
-				attackForce = o.allies.Count * attackScale * attackForce;
+
 				var defenceForce = 0f;
-				foreach (var e in o.ennemies) {
-					defenceForce = defenceForce + e.damages;
+				if (o.ennemies != null) {
+					foreach (var e in o.ennemies) {
+						defenceForce = defenceForce + e.damages;
+					}
+					defenceForce = o.ennemies.Count * defenceScale * defenceForce;
 				}
-				defenceForce = o.ennemies.Count * defenceScale * defenceForce;
-				float result = attackForce - defenceForce;
+
+				var result = attackForce - defenceForce;
 				if (result > 0) {
 					//					compute damage for ally
 				} else {
-					o.healthPoints += result as int;
+					o.healthPoints += (int) result;
 				}
 			}
 			yield return new WaitForSeconds (combatDelay);
