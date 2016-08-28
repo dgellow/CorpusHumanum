@@ -35,7 +35,7 @@ public class DetailView : MonoBehaviour {
 		}
 
 		allyCount.text = string.Format ("{0} allies", organ.allies.Count);
-		enemyCount.text = string.Format ("{0} enemies", organ.ennemies.Count);
+		enemyCount.text = string.Format ("{0} enemies", organ.countEnemies());
 	}
 
 	string HealthPointsToText() {

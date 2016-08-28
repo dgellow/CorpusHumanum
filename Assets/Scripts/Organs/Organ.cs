@@ -19,16 +19,26 @@ public class Organ : MonoBehaviour {
 	private Collider2D collider2D;
 	private GameUI gameUI;
 
-	public List<Ennemy> ennemies;
+	public Dictionary<Enemy, int> enemies;
 	public List<Ally> allies;
 
 	void Start () {
-		ennemies = new List<Ennemy> ();
+		enemies = new Dictionary<Enemy,  int> ();
 		allies = new List<Ally> ();
 		maxHealthPoints = healthPoints;
 		image = GetComponent<Image> ();
 		collider2D = GetComponent<Collider2D> ();
 		gameUI = FindObjectOfType<GameUI> ();
+	}
+
+	public int countEnemies() {
+		var enemyCount = 0;
+		if (enemies != null) {
+			foreach (KeyValuePair<Enemy, int> entry in enemies) {
+				enemyCount += entry.Value;
+			}
+		}
+		return enemyCount;
 	}
 
 	void Update () {

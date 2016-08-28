@@ -16,6 +16,9 @@ public class Level1Scenario : MonoBehaviour, IScenario {
 		heart.allies.Add (new Ally (1, new List<EnemyType>()));
 		heart.allies.Add (new Ally (1, new List<EnemyType>()));
 
+		int enemyCount = 50;
+		heart.enemies.Add (new Enemy (3, EnemyType.Triangle), enemyCount);
+
 		yield break;
 	}
 }

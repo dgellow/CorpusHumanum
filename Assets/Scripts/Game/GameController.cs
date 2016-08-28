@@ -105,11 +105,13 @@ public class GameController : MonoBehaviour {
 				}
 
 				var defenceForce = 0f;
-				if (o.ennemies != null) {
-					foreach (var e in o.ennemies) {
-						defenceForce = defenceForce + e.damages;
+				var enemyCount = 0;
+				if (o.enemies != null) {
+					foreach (KeyValuePair<Enemy, int> entry in o.enemies) {
+						defenceForce = entry.Key.damages * entry.Value;
+						enemyCount += entry.Value;
 					}
-					defenceForce = o.ennemies.Count * defenceScale * defenceForce;
+					defenceForce = enemyCount * defenceScale * defenceForce;
 				}
 
 				var result = attackForce - defenceForce;

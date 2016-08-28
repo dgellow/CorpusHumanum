@@ -4,9 +4,15 @@ using System.Collections.Generic;
 
 public enum UnitStatus { Good, Weakened, Dead }
 
-public struct Ennemy {
+public struct Enemy {
 	public UnitStatus status;
 	public int damages;
+	public EnemyType identification;
+	public Enemy (int damages, EnemyType id) {
+		this.damages = damages;
+		identification = id;
+		status = UnitStatus.Good;
+	}
 }
 
 public struct Ally {
