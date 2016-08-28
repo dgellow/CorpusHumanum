@@ -11,6 +11,11 @@ public struct Ennemy {
 
 public struct Ally {
 	public UnitStatus status;
-	public List<Ennemy> strongAgainst;
+	public List<EnemyType> strongAgainst;
 	public int damages;
+	public Ally(int damages, List<EnemyType> strengths) {
+		status = UnitStatus.Good;
+		strongAgainst = strengths;
+		this.damages = damages;
+	}
 }

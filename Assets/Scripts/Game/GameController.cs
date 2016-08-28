@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum Scenario { Level1, Level2, Level3 }
+
 public class GameController : MonoBehaviour {
 	public static GameController gameState;
 	public Organ[] organs;
@@ -16,6 +18,7 @@ public class GameController : MonoBehaviour {
 	public int scanDelay = 10;
 	public float attackScale = 0.3f;
 	public float defenceScale = 0.3f;
+	public Scenario selectedScenario;
 
 	void Awake() {
 		if (gameState == null) {
@@ -31,8 +34,26 @@ public class GameController : MonoBehaviour {
 	public void Initialize() {
 		Debug.Log ("Initialize game state");
 	}
+	//can't inline that shit because…????because!	
+	private IScenario scenarioForSelection(Scenario selection ) {
+		switch (selection) {
+		case Scenario.Level1:
+			return FindObjectOfType<Level1Scenario> ();
+		case Scenario.Level2:
+			return FindObjectOfType<Level2Scenario> ();
+		case Scenario.Level3:
+			return FindObjectOfType<Level3Scenario> ();
+		}
+		//"not all path return a value, c# pls
+		return null;
+	}
 
 	public void StartGameLogic() {
+		Debug.Log ("starting game logic");
+		//can't put this in Initialize since it's never called when we don't start from main menu
+
+		IScenario current = scenarioForSelection (selectedScenario);
+		StartCoroutine (current.Play ());
 		StartCoroutine (CombatUpdate ());
 		StartCoroutine (IncomeGenerator ());
 	}
