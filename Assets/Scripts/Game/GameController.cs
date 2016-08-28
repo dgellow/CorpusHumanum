@@ -27,6 +27,9 @@ public class GameController : MonoBehaviour {
 
 	public void Initialize() {
 		Debug.Log ("Initialize game state");
+	}
+
+	public void StartGameLogic() {
 		StartCoroutine (IncomeGenerator ());
 	}
 

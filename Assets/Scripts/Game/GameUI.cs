@@ -14,7 +14,7 @@ public class GameUI : MonoBehaviour {
 
 	void Start() {
 		detailViewOriginalPosition = detailView.transform.localPosition;
-		GameController.gameState.Initialize ();
+		GameController.gameState.StartGameLogic ();
 	}
 
 	void OnGUI() {
