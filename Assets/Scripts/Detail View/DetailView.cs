@@ -11,6 +11,9 @@ public class DetailView : MonoBehaviour {
 
 	private Image healthBarImage;
 
+	public Text enemyCount;
+	public Text allyCount;
+
 	public void Render() {
 		var organ = GameController.gameState.selectedOrgan;
 		if (organ != null) {
@@ -30,6 +33,9 @@ public class DetailView : MonoBehaviour {
 			healthBarText.color = Color.black;
 			healthBarImage.color = Color.grey;
 		}
+
+		allyCount.text = string.Format ("{0} allies", organ.allies.Count);
+		enemyCount.text = string.Format ("{0} enemies", organ.ennemies.Count);
 	}
 
 	string HealthPointsToText() {
