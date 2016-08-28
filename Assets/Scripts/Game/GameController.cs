@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour {
 	public Organ[] organs;
 	public Organ selectedOrgan;
 	public float incomeRate = 1.2f;
+	public float combatDelay = 2f;
 	public int incomeAmount = 5;
 	public int maxIncome = 1000;
 	public int minIncome = 0;
@@ -65,6 +66,26 @@ public class GameController : MonoBehaviour {
 			return false;
 		}
 		return true;
+	}
+
+	IEnumerator CombatUpdate() {
+		while (true) {
+			Debug.Log ("updating combat");
+			foreach (Organ o in organs) {
+				float attackForce = 0f;
+				foreach (Ally a in o.allies) {
+					attackForce = attackForce + a.damages;
+				}
+				attackForce = o.allies.Count * 0.3f * attackForce;
+				float defenceForce = 0f;
+				foreach (Ennemy e in o.ennemies) {
+					defenceForce = defenceForce + e.damages;
+				}
+				defenceForce = o.ennemies.Count * 0.3f * defenceForce;
+
+			}
+			yield return new WaitForSeconds (combatDelay);
+		}
 	}
 
 	IEnumerator IncomeGenerator() {
