@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(PolygonCollider2D))]
-[RequireComponent(typeof(Image))]
 public class Organ : MonoBehaviour {
 
 	public string name;
-	public Vector2 selectedScale;
+	public Vector3 selectedScale;
 	public Color selectedColor;
 	public bool isSelecting = false;
 	public Image image;
@@ -18,7 +16,7 @@ public class Organ : MonoBehaviour {
 
 	private int maxHealthPoints;
 	private int minHealthPoints = 0;
-	private PolygonCollider2D collider2D;
+	private Collider2D collider2D;
 	private GameUI gameUI;
 
 	public List<Ennemy> ennemies;
@@ -29,7 +27,7 @@ public class Organ : MonoBehaviour {
 		allies = new List<Ally> ();
 		maxHealthPoints = healthPoints;
 		image = GetComponent<Image> ();
-		collider2D = GetComponent<PolygonCollider2D> ();
+		collider2D = GetComponent<Collider2D> ();
 		gameUI = FindObjectOfType<GameUI> ();
 	}
 
@@ -57,7 +55,7 @@ public class Organ : MonoBehaviour {
 			image.transform.localScale = selectedScale;
 		} else {
 			image.color = Color.white;
-			image.transform.localScale = new Vector2 (1f, 1f);
+			image.transform.localScale = new Vector3 (1f, 1f, 1f);
 		}
 	}
 
