@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void StartGameLogic() {
+		StartCoroutine (CombatUpdate ());
 		StartCoroutine (IncomeGenerator ());
 	}
 
@@ -82,7 +83,12 @@ public class GameController : MonoBehaviour {
 					defenceForce = defenceForce + e.damages;
 				}
 				defenceForce = o.ennemies.Count * 0.3f * defenceForce;
-
+				float result = attackForce - defenceForce;
+				if (result > 0) {
+//					compute damage for ally
+				} else {
+					o.healthPoints += (int)result;
+				}
 			}
 			yield return new WaitForSeconds (combatDelay);
 		}
