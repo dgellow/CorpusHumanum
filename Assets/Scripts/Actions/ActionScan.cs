@@ -7,6 +7,7 @@ public class ActionScan : MonoBehaviour, IPlayerAction {
 
 	public void Use () {
 		Debug.Log ("SCAN!");	
+		StartCoroutine (GameController.gameState.selectedOrgan.PlayScan());
 	}
 
 	#endregion

@@ -12,6 +12,8 @@ public class Organ : MonoBehaviour {
 	public bool isSelecting = false;
 	public Image image;
 	public int healthPoints = 100;
+	public bool isBeingScanned = false;
+	public int countDownScan;
 
 	private int maxHealthPoints;
 	private int minHealthPoints = 0;
@@ -70,5 +72,14 @@ public class Organ : MonoBehaviour {
 
 	void Die() {
 		throw new System.NotImplementedException ();
+	}
+
+	public IEnumerator PlayScan() {
+		isBeingScanned = true;
+		for (var i = GameController.gameState.scanDelay; i >= 0; i--) {
+			yield return new WaitForSeconds (1);
+			countDownScan = i;
+		}
+		isBeingScanned = false;
 	}
 }

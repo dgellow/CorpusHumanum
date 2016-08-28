@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameController : MonoBehaviour {
 	public static GameController gameState;
@@ -11,6 +12,7 @@ public class GameController : MonoBehaviour {
 	public int minIncome = 0;
 	public bool generateIncome = true;
 	public int incomeReserve = 0;
+	public int scanDelay = 10;
 
 	void Awake() {
 		if (gameState == null) {

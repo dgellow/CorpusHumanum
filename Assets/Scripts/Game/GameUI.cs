@@ -18,8 +18,11 @@ public class GameUI : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		detailView.Render ();
-		globalView.Render ();
+		if (GameController.gameState.selectedOrgan != null) {
+			detailView.Render ();
+		} else {
+			globalView.Render ();
+		}
 	
 		RenderGUI (); 
 	}
