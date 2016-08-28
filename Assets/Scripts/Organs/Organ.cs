@@ -3,19 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public enum OrganEnum { Heart, Brain, Lungs, Liver, Stomach, SkinLArm, SKinRArm, SkinLLeg, SkinRLeg }
-public enum UnitStatus { Good, Weakened, Dead }
-public struct Ennemy {
-	public UnitStatus status;
-	public int damages;
-}
-
-public struct Ally {
-	public UnitStatus status;
-	public List<Ennemy> strongAgainst;
-	public int damages;
-}
-
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(Image))]
 public class Organ : MonoBehaviour {
@@ -28,7 +15,6 @@ public class Organ : MonoBehaviour {
 	public int healthPoints = 100;
 	public bool isBeingScanned = false;
 	public int countDownScan;
-	public OrganEnum OrganType;
 
 	private int maxHealthPoints;
 	private int minHealthPoints = 0;
@@ -39,6 +25,8 @@ public class Organ : MonoBehaviour {
 	public List<Ally> allies;
 
 	void Start () {
+		ennemies = new List<Ennemy> ();
+		allies = new List<Ally> ();
 		maxHealthPoints = healthPoints;
 		image = GetComponent<Image> ();
 		collider2D = GetComponent<PolygonCollider2D> ();
