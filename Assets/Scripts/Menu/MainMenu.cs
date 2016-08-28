@@ -20,7 +20,6 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void ContinueGame() {
-		GameController.gameState.Initialize ();
 		GameController.gameState.LoadState ();
 		SceneManager.LoadScene (gameScene);	
 	}

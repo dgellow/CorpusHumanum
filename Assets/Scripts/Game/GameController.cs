@@ -5,7 +5,7 @@ public class GameController : MonoBehaviour {
 	public static GameController gameState;
 	public Organ[] organs;
 	public Organ selectedOrgan;
-	public int incomeRate = 10;
+	public float incomeRate = 1.2f;
 	public int incomeAmount = 5;
 	public int maxIncome = 1000;
 	public int minIncome = 0;
@@ -44,18 +44,22 @@ public class GameController : MonoBehaviour {
 		Debug.Log ("Save settings");
 	}
 
-	public void GiveToIncomeReserve(int amount) {
+	public bool GiveToIncomeReserve(int amount) {
 		incomeReserve += amount;
 		if (incomeReserve > maxIncome) {
 			incomeReserve = maxIncome;
+			return false;
 		}
+		return true;
 	}
 
-	public void TakeFromIncomeReserve(int amount) {
+	public bool TakeFromIncomeReserve(int amount) {
 		incomeReserve -= amount;
 		if (incomeReserve < minIncome) {
-			incomeReserve = minIncome;
+			incomeReserve += amount;
+			return false;
 		}
+		return true;
 	}
 
 	IEnumerator IncomeGenerator() {
@@ -67,5 +71,22 @@ public class GameController : MonoBehaviour {
 			}
 			yield return new WaitForSeconds (incomeRate);
 		}
+	}
+
+	public void GenerateRandomEnemies(Organ target, int number) {
+		for (var i = 0; i < number; i++) {
+			var type = EnemyType.SomethingElse; // <== FIXME Instead, randomize enemy type
+			GenerateEnemies (target, type, 1);	
+		}
+
+		throw new System.NotImplementedException (); // <== FIXME Prove that you read comments, remove this!
+	}
+
+	public void GenerateEnemies(Organ target, EnemyType type, int number) {
+		// Hint:
+		// Use Instantiate to generate an object from a prefab
+		//
+
+		throw new System.NotImplementedException ();
 	}
 }

@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PolygonCollider2D))]
-[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Image))]
 public class Organ : MonoBehaviour {
 
 	public string name;
 	public Vector2 selectedScale;
 	public Color selectedColor;
 	public bool isSelecting = false;
-	public SpriteRenderer spriteRenderer;
-	public int nbDetectedTumor;
-	public int nbDetectedForeignBody;
-	public int nbDetectedVirus;
+	public Image image;
+	public int healthPoints = 100;
 
+	private int maxHealthPoints;
+	private int minHealthPoints = 0;
 	private PolygonCollider2D collider2D;
 	private GameUI gameUI;
 
 	void Start () {
-		spriteRenderer = GetComponent<SpriteRenderer> ();
+		maxHealthPoints = healthPoints;
+		image = GetComponent<Image> ();
 		collider2D = GetComponent<PolygonCollider2D> ();
 		gameUI = FindObjectOfType<GameUI> ();
 	}
@@ -43,11 +45,30 @@ public class Organ : MonoBehaviour {
 		}
 			
 		if (isSelecting) {
-			spriteRenderer.color = selectedColor;
-			spriteRenderer.transform.localScale = selectedScale;
+			image.color = selectedColor;
+			image.transform.localScale = selectedScale;
 		} else {
-			spriteRenderer.color = Color.white;
-			spriteRenderer.transform.localScale = new Vector2 (1f, 1f);
+			image.color = Color.white;
+			image.transform.localScale = new Vector2 (1f, 1f);
 		}
+	}
+
+	void Hurt(int amount) {
+		healthPoints -= amount;
+		if (healthPoints <= minHealthPoints) {
+			healthPoints = minHealthPoints;
+			Die ();
+		}
+	}
+
+	void Heal(int amount) {
+		healthPoints += amount;
+		if (healthPoints > maxHealthPoints) {
+			healthPoints = maxHealthPoints;
+		}
+	}
+
+	void Die() {
+		throw new System.NotImplementedException ();
 	}
 }

@@ -1,20 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour {
+	
 	public string mainMenuScene;
-	public GameObject globalView;
+	public GlobalView globalView;
 	public DetailView detailView;
+	public Text incomeReserveText;
 
 	private Vector2 detailViewOriginalPosition;
 
 	void Start() {
 		detailViewOriginalPosition = detailView.transform.localPosition;
+		GameController.gameState.Initialize ();
 	}
 
 	void OnGUI() {
 		detailView.Render ();
+		globalView.Render ();
+	
+		RenderGUI (); 
+	}
+
+	void RenderGUI() {
+		incomeReserveText.text = GameController.gameState.incomeReserve.ToString ();
 	}
 
 	public void SaveAndBackToMenu() {
