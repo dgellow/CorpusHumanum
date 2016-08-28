@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour {
 	public bool generateIncome = true;
 	public int incomeReserve = 0;
 	public int scanDelay = 10;
+	public float attackScale = 0.3f;
+	public float defenceScale = 0.3f;
 
 	void Awake() {
 		if (gameState == null) {
@@ -72,22 +74,22 @@ public class GameController : MonoBehaviour {
 	IEnumerator CombatUpdate() {
 		while (true) {
 			Debug.Log ("updating combat");
-			foreach (Organ o in organs) {
-				float attackForce = 0f;
-				foreach (Ally a in o.allies) {
+			foreach (var o in organs) {
+				var attackForce = 0f;
+				foreach (var a in o.allies) {
 					attackForce = attackForce + a.damages;
 				}
-				attackForce = o.allies.Count * 0.3f * attackForce;
-				float defenceForce = 0f;
-				foreach (Ennemy e in o.ennemies) {
+				attackForce = o.allies.Count * attackScale * attackForce;
+				var defenceForce = 0f;
+				foreach (var e in o.ennemies) {
 					defenceForce = defenceForce + e.damages;
 				}
-				defenceForce = o.ennemies.Count * 0.3f * defenceForce;
+				defenceForce = o.ennemies.Count * defenceScale * defenceForce;
 				float result = attackForce - defenceForce;
 				if (result > 0) {
-//					compute damage for ally
+					//					compute damage for ally
 				} else {
-					o.healthPoints += (int)result;
+					o.healthPoints += result as int;
 				}
 			}
 			yield return new WaitForSeconds (combatDelay);
