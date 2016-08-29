@@ -11,6 +11,7 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	public Color selectedColor;
 	public bool isSelecting = false;
 	public Image image;
+	public Sprite backgroundImage;
 	public int healthPoints = 100;
 	public bool isBeingScanned = false;
 	public bool isBeingCollected = false;

@@ -19,7 +19,7 @@ public class DetailView : MonoBehaviour {
 		var organ = GameController.gameState.selectedOrgan;
 		if (organ != null) {
 			organNameText.text = organ.name;
-			backgroundOrgan.sprite = organ.image.sprite;
+			backgroundOrgan.sprite = organ.backgroundImage;
 		}
 			
 		healthBarImage = healthBar.GetComponent<Image> ();
