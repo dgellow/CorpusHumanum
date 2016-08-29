@@ -76,9 +76,12 @@ class Macrophage: Ally, ICanAttack, ICanBeAttacked {
 	#region ICanAttack implementation
 
 	public void Hurt () {
-		var target = GameController.gameState.organsEnemies [organAttachedTo.id] [0];
-		if (target != null && target.status != UnitStatus.Dead) {
-			target.ReactToBeingHurt ();	
+		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
+		if (enemies.Count > 0) {
+			var target = enemies [0];
+			if (target != null && target.status != UnitStatus.Dead) {
+				target.ReactToBeingHurt ();	
+			}
 		}
 	}
 
@@ -125,9 +128,12 @@ public class Killer: Ally, ICanAttack {
 
 	#region ICanAttack implementation
 	public void Hurt () {
-		var target = GameController.gameState.organsEnemies [organAttachedTo.id][0];
-		while (target.status != UnitStatus.Dead) {
-			target.ReactToBeingHurt ();
+		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
+		if (enemies.Count > 0) {
+			var target = enemies [0];
+			while (target.status != UnitStatus.Dead) {
+				target.ReactToBeingHurt ();
+			}
 		}
 	}
 	#endregion
