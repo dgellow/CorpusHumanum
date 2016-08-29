@@ -140,7 +140,8 @@ public class Neutrophil: Ally, ICanBehaveInCombat {
 		this.lifespan = GameController.gameState.neutrophilLifespan;
 		this.weakenedLifespan = GameController.gameState.neutrophilWeakLifespan;
 	}
-	#	region ICanBehaveInCombat implementation
+
+	#region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
 		var nbTarget = GameController.gameState.neutrophilNbTarget;
 		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];

@@ -183,17 +183,7 @@ public class GameController : MonoBehaviour {
 			yield return new WaitForSeconds (combatDelay);
 		}
 	}
-
-	IEnumerator LifespanUpdate() {
-		while (true) {
-			Debug.Log ("Update lifespan");
-
-
-
-			yield return new WaitForSeconds (lifespanDelay);
-		}
-	}
-
+		
 	IEnumerator IncomeGenerator () {
 		// Infinite loop
 		while (true) {

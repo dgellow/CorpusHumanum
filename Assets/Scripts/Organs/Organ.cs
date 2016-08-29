@@ -17,6 +17,9 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	public bool isBeingCollected = false;
 	public int countDownScan;
 	public int countDownCollect;
+	public RectTransform totalHealthMiniBar;
+	public RectTransform healthMiniBar;
+	public Image healthMiniBarImage;
 
 	public int maxHealthPoints;
 	private int minHealthPoints = 0;
@@ -25,6 +28,7 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 
 	void Start () {
 		maxHealthPoints = healthPoints;
+		healthMiniBarImage = healthMiniBar.GetComponent<Image> ();
 		image = GetComponent<Image> ();
 		collider2D = GetComponent<Collider2D> ();
 		gameUI = FindObjectOfType<GameUI> ();
