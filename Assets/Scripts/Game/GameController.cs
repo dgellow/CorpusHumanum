@@ -24,6 +24,11 @@ public class GameController : MonoBehaviour {
 	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
 
+	public int neutrophilNbTarget = 5;
+	public float helperHealDelay = 10f;
+	public int helperNbTarget = 5;
+	public int helperHealAmount = 10;
+
 	void Awake () {
 		if (gameState == null) {
 			DontDestroyOnLoad (gameObject);
