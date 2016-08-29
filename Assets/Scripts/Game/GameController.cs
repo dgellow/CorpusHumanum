@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Scenario { Level1, Level2, Level3 }
-
 public class GameController : MonoBehaviour {
 	public static GameController gameState;
 	public Organ[] organs;
+	public List<Enemy>[] organsEnemies;
+	public List<Ally>[] organsAllies;
 	public Organ selectedOrgan;
 	public float incomeRate = 1.2f;
 	public float combatDelay = 2f;
@@ -16,26 +16,33 @@ public class GameController : MonoBehaviour {
 	public bool generateIncome = true;
 	public int incomeReserve = 0;
 	public int scanDelay = 10;
-	public float attackScale = 0.3f;
-	public float defenceScale = 0.3f;
+	public float alliesScaleFactor = 0.3f;
+	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
 
-	void Awake() {
+	void Awake () {
 		if (gameState == null) {
 			DontDestroyOnLoad (gameObject);
 			gameState = this;
 
 			organs = FindObjectsOfType<Organ> ();
+			organsEnemies = new List<Enemy>[organs.Length];
+			organsAllies = new List<Ally>[organs.Length];
+			for (var i = 0; i < organs.Length; i++) {
+				organs [i].id = i;
+				organsAllies [i] = new List<Ally> ();
+			}
 		} else if (gameState != this) {
 			Destroy (gameState);
 		}
 	}
 
-	public void Initialize() {
+	public void Initialize () {
 		Debug.Log ("Initialize game state");
 	}
-	//can't inline that shit because…????because!	
-	private IScenario scenarioForSelection(Scenario selection ) {
+
+	//can't inline that shit because…????because!
+	IScenario scenarioForSelection (Scenario selection) {
 		switch (selection) {
 		case Scenario.Level1:
 			return FindObjectOfType<Level1Scenario> ();
@@ -43,38 +50,41 @@ public class GameController : MonoBehaviour {
 			return FindObjectOfType<Level2Scenario> ();
 		case Scenario.Level3:
 			return FindObjectOfType<Level3Scenario> ();
+		default:
+			return null;
 		}
-		//"not all path return a value, c# pls
-		return null;
 	}
 
-	public void StartGameLogic() {
+	public void StartGameLogic () {
 		Debug.Log ("starting game logic");
-		//can't put this in Initialize since it's never called when we don't start from main menu
 
-		IScenario current = scenarioForSelection (selectedScenario);
-		StartCoroutine (current.Play ());
+		//can't put this in Initialize since it's never called when we don't start from main menu
+		IScenario currentScenario = scenarioForSelection (selectedScenario);
+		if (currentScenario != null) {
+			StartCoroutine (currentScenario.Play ());
+		}
+
 		StartCoroutine (CombatUpdate ());
 		StartCoroutine (IncomeGenerator ());
 	}
 
-	public void LoadState() {
+	public void LoadState () {
 		Debug.Log ("Load state");
 	}
 
-	public void SaveState() {
+	public void SaveState () {
 		Debug.Log ("Save state");
 	}
 
-	public void LoadSettings() {
+	public void LoadSettings () {
 		Debug.Log ("Load settings");
 	}
 
-	public void SaveSettings() {
+	public void SaveSettings () {
 		Debug.Log ("Save settings");
 	}
 
-	public bool GiveToIncomeReserve(int amount) {
+	public bool GiveToIncomeReserve (int amount) {
 		incomeReserve += amount;
 		if (incomeReserve > maxIncome) {
 			incomeReserve = maxIncome;
@@ -83,7 +93,7 @@ public class GameController : MonoBehaviour {
 		return true;
 	}
 
-	public bool TakeFromIncomeReserve(int amount) {
+	public bool TakeFromIncomeReserve (int amount) {
 		incomeReserve -= amount;
 		if (incomeReserve < minIncome) {
 			incomeReserve += amount;
@@ -92,40 +102,35 @@ public class GameController : MonoBehaviour {
 		return true;
 	}
 
-	IEnumerator CombatUpdate() {
+	IEnumerator CombatUpdate () {
 		while (true) {
 			Debug.Log ("updating combat");
 			foreach (var o in organs) {
-				var attackForce = 0f;
-				if (o.allies != null) {
-					foreach (var a in o.allies) {
-						attackForce = attackForce + a.damages;
-					}
-					attackForce = o.allies.Count * attackScale * attackForce;
-				}
+				var allies = organsAllies [o.id];
+				var enemies = organsEnemies [o.id];
 
-				var defenceForce = 0f;
-				var enemyCount = 0;
-				if (o.enemies != null) {
-					foreach (KeyValuePair<Enemy, int> entry in o.enemies) {
-						defenceForce = entry.Key.damages * entry.Value;
-						enemyCount += entry.Value;
-					}
-					defenceForce = enemyCount * defenceScale * defenceForce;
-				}
+				if (allies != null && enemies != null) {
+					var alliesForce = (allies.Count * alliesScaleFactor);
 
-				var result = attackForce - defenceForce;
-				if (result > 0) {
-					//					compute damage for ally
-				} else {
-					o.healthPoints += (int) result;
+					var enemiesForce = 0f;
+					foreach (var e in enemies) {
+						enemiesForce += e.damages;
+					}
+					enemiesForce *= (enemies.Count * enemiesScaleFactor);
+
+					var result = alliesForce - enemiesForce;
+					if (result > 0) {
+						//					compute damage for ally
+					} else {
+						o.healthPoints += (int)result;
+					}
 				}
 			}
 			yield return new WaitForSeconds (combatDelay);
 		}
 	}
 
-	IEnumerator IncomeGenerator() {
+	IEnumerator IncomeGenerator () {
 		// Infinite loop
 		while (true) {
 			if (generateIncome) {
@@ -136,20 +141,41 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	public void GenerateRandomEnemies(Organ target, int number) {
+	public void GenerateRandomEnemies (Organ target, int number = 1) {
 		for (var i = 0; i < number; i++) {
-			var type = EnemyType.SomethingElse; // <== FIXME Instead, randomize enemy type
+			var type = UnitTier.SomethingElse; // <== FIXME Instead, randomize enemy type
 			GenerateEnemies (target, type, 1);	
 		}
 
 		throw new System.NotImplementedException (); // <== FIXME Prove that you read comments, remove this!
 	}
 
-	public void GenerateEnemies(Organ target, EnemyType type, int number) {
+	public void GenerateEnemies (Organ target, UnitTier type, int number = 1) {
 		// Hint:
 		// Use Instantiate to generate an object from a prefab
 		//
 
 		throw new System.NotImplementedException ();
+	}
+		
+	public void GenerateAllies <T> (Organ target, int number = 1) where T: Ally, new() {
+		var allies = organsAllies [target.id];
+		for (var i = 0; i < number; i++) {
+			var ally = new T ();
+			ally.organAttachedTo = target;
+			allies.Add (ally);
+		}
+	}
+
+	public int CountEnemies (Organ organ) {
+		return organsEnemies [organ.id].Count;
+	}
+
+	public int CountAllies (Organ organ) {
+		return organsAllies [organ.id].Count;
+	}
+
+	public void StartExternalCoroutine(IEnumerator enumerator) {
+		StartCoroutine (enumerator);
 	}
 }

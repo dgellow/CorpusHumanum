@@ -4,21 +4,23 @@ using System.Collections.Generic;
 
 public class Level1Scenario : MonoBehaviour, IScenario {
 
+	public int ennemiesFirstWaveBrain = 50;
+
+
+	#region IScenario implementation
+
 	public IEnumerator Play () {
-		Debug.Log ("starting level 1");
+		Debug.Log ("Starting level 1");
 		var heart = FindObjectOfType<OrganHeart> ().GetComponent<Organ> ();
 		if (heart == null) {
 			throw new MissingReferenceException ("Cannot find heart organ");
 		}
 
-		heart.allies.Add (new Ally (1, new List<EnemyType>()));
-		heart.allies.Add (new Ally (1, new List<EnemyType>()));
-		heart.allies.Add (new Ally (1, new List<EnemyType>()));
-		heart.allies.Add (new Ally (1, new List<EnemyType>()));
-
-		int enemyCount = 50;
-		heart.enemies.Add (new Enemy (3, EnemyType.Triangle), enemyCount);
+		GameController.gameState.GenerateAllies <Macrophage> (heart, 4);
+		GameController.gameState.GenerateEnemies (heart, UnitTier.Triangle, ennemiesFirstWaveBrain);
 
 		yield break;
 	}
+
+	#endregion
 }

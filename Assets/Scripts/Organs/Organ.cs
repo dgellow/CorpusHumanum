@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class Organ : MonoBehaviour {
+public class Organ : MonoBehaviour, ICanBeAttacked {
 
+	public int id;
 	public string name;
 	public Vector3 selectedScale;
 	public Color selectedColor;
@@ -19,28 +20,13 @@ public class Organ : MonoBehaviour {
 	private Collider2D collider2D;
 	private GameUI gameUI;
 
-	public Dictionary<Enemy, int> enemies;
-	public List<Ally> allies;
-
 	void Start () {
-		enemies = new Dictionary<Enemy,  int> ();
-		allies = new List<Ally> ();
 		maxHealthPoints = healthPoints;
 		image = GetComponent<Image> ();
 		collider2D = GetComponent<Collider2D> ();
 		gameUI = FindObjectOfType<GameUI> ();
 	}
-
-	public int countEnemies() {
-		var enemyCount = 0;
-		if (enemies != null) {
-			foreach (KeyValuePair<Enemy, int> entry in enemies) {
-				enemyCount += entry.Value;
-			}
-		}
-		return enemyCount;
-	}
-
+		
 	void Update () {
 		// Handle organ selection
 		if (Input.touchCount == 1) {
@@ -69,7 +55,13 @@ public class Organ : MonoBehaviour {
 		}
 	}
 
-	void Hurt(int amount) {
+	#region ICanBeAttacked implementation
+
+	public void ReactToBeingHurt() {
+		throw new System.NotImplementedException ();
+	}
+
+	public void ReactToBeingHurt (int amount) {
 		healthPoints -= amount;
 		if (healthPoints <= minHealthPoints) {
 			healthPoints = minHealthPoints;
@@ -77,7 +69,9 @@ public class Organ : MonoBehaviour {
 		}
 	}
 
-	void Heal(int amount) {
+	#endregion
+
+	public void Heal(int amount) {
 		healthPoints += amount;
 		if (healthPoints > maxHealthPoints) {
 			healthPoints = maxHealthPoints;

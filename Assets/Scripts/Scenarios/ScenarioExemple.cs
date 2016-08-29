@@ -22,7 +22,7 @@ public class ScenarioExemple : MonoBehaviour, IScenario {
 		yield return new WaitForSeconds (20); 
 
 		// Generate specific enemies
-		GameController.gameState.GenerateEnemies (brain, EnemyType.Octogon, 25);
+		GameController.gameState.GenerateEnemies (brain, UnitTier.Octogon, 25);
 		// Wait
 		yield return new WaitForSeconds (35);
 
