@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum UnitStatus { Good, Weakened, Dead }
 
@@ -104,9 +105,12 @@ class Macrophage: Ally, ICanAttack, ICanBeAttacked {
 	#region ICanAttack implementation
 
 	public void Hurt () {
-		var target = GameController.gameState.organsEnemies [organAttachedTo.id] [0];
-		if (target != null && target.status != UnitStatus.Dead) {
-			target.ReactToBeingHurt ();	
+		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
+		if (enemies.Count > 0) {
+			var target = enemies [0];
+			if (target != null && target.status != UnitStatus.Dead) {
+				target.ReactToBeingHurt ();	
+			}
 		}
 	}
 
@@ -138,17 +142,22 @@ public class Neutrophil: Ally, ICanBehaveInCombat {
 	}
 	#	region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
+		var nbTarget = GameController.gameState.neutrophilNbTarget;
 		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
 		var allies = GameController.gameState.organsAllies [organAttachedTo.id];
-		foreach (var e in enemies) {
-			e.ReactToBeingHurt ();
-		}
-		foreach (var a in allies) {
-			var attackableAlly = a as ICanBeAttacked;
-			if (attackableAlly != null) {
-				attackableAlly.ReactToBeingHurt ();
+		for (var i = 0; i < nbTarget; i++) {
+			// Attack random enemy
+			if (enemies.Count > 0) {
+				var e = enemies.GetRandomValue ();
+				e.ReactToBeingHurt ();
+			}
+			// Attack random ally
+			if (allies.Count > 0) {
+				var a = allies.OfType<ICanBeAttacked> ().ToList ().GetRandomValue ();
+				a.ReactToBeingHurt ();
 			}
 		}
+		// Commit suicide
 		status = UnitStatus.Dead;
 	}
 	#endregion
@@ -159,19 +168,24 @@ public class Killer: Ally, ICanAttack {
 	public Killer () {
 		this.lifespan = GameController.gameState.killerLifespan;
 		this.weakenedLifespan = GameController.gameState.killerWeakLifespan;
+		strongAgainst = new List<UnitTier> ();
 	}
+
 	#region ICanAttack implementation
 	public void Hurt () {
-		var target = GameController.gameState.organsEnemies [organAttachedTo.id][0];
-		while (target.status != UnitStatus.Dead) {
-			target.ReactToBeingHurt ();
+		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
+		if (enemies.Count > 0) {
+			var naturalEnemies = enemies.Where (x => strongAgainst.Contains (x.tier)).ToList ();
+			var target = naturalEnemies.Count > 0 ? naturalEnemies.GetRandomValue () : enemies.GetRandomValue ();
+			while (target.status != UnitStatus.Dead) {
+				target.ReactToBeingHurt ();
+			}
 		}
 	}
 	#endregion
 }
 
 public class Helper: Ally, ICanBehaveInCombat {
-	private int healDelay = 10;
 	private bool canHeal = true;
 
 	public Helper () {
@@ -182,7 +196,16 @@ public class Helper: Ally, ICanBehaveInCombat {
 	#region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
 		if (canHeal) {
-			organAttachedTo.Heal (10);
+			var healableAllies = GameController.gameState.organsAllies[organAttachedTo.id].OfType<ICanBeAttacked> ().ToList ();
+			for (var i = 0; i < GameController.gameState.helperNbTarget; i++) {
+				var a = healableAllies.GetRandomValue () as Ally;
+				if (a.status == UnitStatus.Dead) {
+					a.status = UnitStatus.Weakened;
+				} else if (a.status == UnitStatus.Weakened) {
+					a.status = UnitStatus.Good;
+				}
+			}
+			organAttachedTo.Heal (GameController.gameState.helperHealAmount);
 			GameController.gameState.StartExternalCoroutine (PlayCooldown ());
 		}
 	}
@@ -190,7 +213,7 @@ public class Helper: Ally, ICanBehaveInCombat {
 
 	IEnumerator PlayCooldown() {
 		canHeal = false;
-		for (var i = healDelay; i >= 0; i--) {
+		for (var i = GameController.gameState.helperHealDelay; i >= 0; i--) {
 			yield return new WaitForSeconds (1);
 		}
 		canHeal = true;

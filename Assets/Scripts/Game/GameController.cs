@@ -12,13 +12,14 @@ public class GameController : MonoBehaviour {
 	public Organ selectedOrgan;
 	public float incomeRate = 1.2f;
 	public float combatDelay = 2f;
-	public float lifetimeDelay = 2f;
+	public float lifespanDelay = 2f;
 	public int incomeAmount = 5;
 	public int maxIncome = 1000;
 	public int minIncome = 0;
 	public bool generateIncome = true;
 	public int incomeReserve = 0;
 	public int scanDelay = 10;
+	public int collectDelay = 10;
 	public float alliesScaleFactor = 0.3f;
 	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
@@ -33,6 +34,11 @@ public class GameController : MonoBehaviour {
 	public int neutrophilWeakLifespan = 0;
 	public int killerLifespan = 120;
 	public int killerWeakLifespan = 30;
+
+	public int neutrophilNbTarget = 5;
+	public float helperHealDelay = 10f;
+	public int helperNbTarget = 5;
+	public int helperHealAmount = 10;
 
 	void Awake () {
 		if (gameState == null) {
@@ -123,10 +129,10 @@ public class GameController : MonoBehaviour {
 
 			foreach (var ls in organsAllies) {
 				foreach (var o in ls) {
-					o.PlayLifespan (lifetimeDelay);
+					o.PlayLifespan (lifespanDelay);
 				}
 			}
-			yield return new WaitForSeconds (lifetimeDelay);
+			yield return new WaitForSeconds (lifespanDelay);
 		}
 	}
 
@@ -137,24 +143,54 @@ public class GameController : MonoBehaviour {
 				var allies = organsAllies [o.id];
 				var enemies = organsEnemies [o.id];
 
-				if (allies != null && enemies != null) {
-					var alliesForce = (allies.Count * alliesScaleFactor);
+				// 1. Macrophages eat random enemies
+				var macrophages = allies.OfType<Macrophage> ();
+				foreach (var m in macrophages) {
+					m.Hurt ();
+				}
 
-					var enemiesForce = 0f;
-					foreach (var e in enemies) {
-						enemiesForce += e.damages;
-					}
-					enemiesForce *= (enemies.Count * enemiesScaleFactor);
+				// 2. Killers kill random enemies with corresponding tier
+				var killers = allies.OfType<Killer> ();
+				foreach (var k in killers) {
+					k.Hurt ();
+				}
 
-					var result = alliesForce - enemiesForce;
-					if (result > 0) {
-						//					compute damage for ally
-					} else {
-						o.healthPoints += (int)result;
-					}
+				// 3. Helpers heal random allies
+				var helpers = allies.OfType<Helper> ();
+				foreach (var h in helpers) {
+					h.CombatBehaviour ();
+				}
+
+				// 4. Neutrophils damage everything and commit suicide
+				var neutrophils = allies.OfType<Neutrophil> ();
+				foreach (var n in neutrophils) {
+					n.CombatBehaviour ();
+				}
+
+				// 5. Remove dead units
+				foreach (var a in allies.Where (x => x.status == UnitStatus.Dead).ToList ()) {
+					allies.Remove (a);
+				}
+				foreach (var e in enemies.Where (x => x.status == UnitStatus.Dead).ToList ()) {
+					enemies.Remove (e);
+				}
+
+				// 6. Enemies attack the organ
+				foreach (var e in enemies) {
+					e.Hurt ();
 				}
 			}
 			yield return new WaitForSeconds (combatDelay);
+		}
+	}
+
+	IEnumerator LifespanUpdate() {
+		while (true) {
+			Debug.Log ("Update lifespan");
+
+
+
+			yield return new WaitForSeconds (lifespanDelay);
 		}
 	}
 
