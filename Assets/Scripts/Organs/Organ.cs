@@ -17,7 +17,7 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	public int countDownScan;
 	public int countDownCollect;
 
-	private int maxHealthPoints;
+	public int maxHealthPoints;
 	private int minHealthPoints = 0;
 	private Collider2D collider2D;
 	private GameUI gameUI;
