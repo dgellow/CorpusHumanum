@@ -232,9 +232,7 @@ public class Helper: Ally, ICanBehaveInCombat {
 			var healableAllies = GameController.gameState.organsAllies[organAttachedTo.id].OfType<ICanBeAttacked> ().ToList ();
 			for (var i = 0; i < GameController.gameState.helperNbTarget; i++) {
 				var a = healableAllies.GetRandomValue () as Ally;
-				if (a.status == UnitStatus.Dead) {
-					a.status = UnitStatus.Weakened;
-				} else if (a.status == UnitStatus.Weakened) {
+				if (a.status == UnitStatus.Weakened) {
 					a.status = UnitStatus.Good;
 				}
 			}

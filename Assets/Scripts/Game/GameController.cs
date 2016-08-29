@@ -26,6 +26,14 @@ public class GameController : MonoBehaviour {
 	public ParticleSystem healParticleSystem;
 	public ParticleSystem damageParticleSystem;
 
+	public RectTransform allyList;
+	public RectTransform enemyList;
+	public GameObject enemyPrefab;
+	public GameObject macrophagePrefab;
+	public GameObject neutrophilPrefab;
+	public GameObject helperPrefab;
+	public GameObject killerPrefab;
+
 	public int bcellLifespan = 180;
 	public int bcellWeakLifespan = 60;
 	public int helperLifespan = 300;
@@ -185,7 +193,7 @@ public class GameController : MonoBehaviour {
 			yield return new WaitForSeconds (combatDelay);
 		}
 	}
-		
+
 	IEnumerator IncomeGenerator () {
 		// Infinite loop
 		while (true) {
@@ -205,26 +213,56 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void GenerateEnemies (Organ target, UnitTier tier, int number = 1) {
-		
 		var enemies = organsEnemies [target.id];
 		for (var i = 0; i < number; i++) {
 			var enemy = new Enemy (target, tier);
 			enemy.damages = Random.Range (1, 4);
 			enemies.Add (enemy);
+			var enemyRenderer = Instantiate<EnemyRenderer> (enemyPrefab.GetComponent<EnemyRenderer> ());
+			enemyRenderer.enemy = enemy;
+			enemyRenderer.transform.SetParent (enemyList.transform, true);
+			var rect = enemyRenderer.GetComponent<RectTransform> ().rect;
+			var halfHeight = enemyList.rect.height / 2;
+			enemyRenderer.transform.localPosition = new Vector3 (
+				Random.Range ((rect.width / 2), enemyList.rect.width - (rect.width / 2)), 
+				Random.Range (-halfHeight + (rect.height / 2), halfHeight - (rect.height / 2)), 
+				0
+			);
 		}
 	}
-		
+
 	public void GenerateAllies <T> (Organ target, int number = 1) where T: Ally, new() {
 		GenerateAllies<T> (target, null, number);
 	}
 
-	public void GenerateAllies <T> (Organ target, List<UnitTier> strongAgainst , int number = 1) where T: Ally, new() {
+	public void GenerateAllies <T> (Organ target, List<UnitTier> strongAgainst, int number = 1) where T: Ally, new() {
 		var allies = organsAllies [target.id];
 		for (var i = 0; i < number; i++) {
 			var ally = new T ();
 			ally.strongAgainst = strongAgainst;
 			ally.organAttachedTo = target;
-			allies.Add (ally);
+			allies.Add (ally);			
+
+			GameObject prefab = null;
+			if (typeof(T) == typeof(Macrophage)) {
+				prefab = macrophagePrefab;
+			} else if (typeof(T) == typeof(Neutrophil)) {
+				prefab = neutrophilPrefab;
+			} else if (typeof(T) == typeof(Helper)) {
+				prefab = helperPrefab;
+			} else if (typeof(T) == typeof(Killer)) {
+				prefab = killerPrefab;
+			}
+			var allyRenderer = Instantiate<AllyRenderer> (prefab.GetComponent<AllyRenderer> ());
+			allyRenderer.ally = ally;
+			allyRenderer.transform.SetParent (allyList.transform, true);
+			var rect = allyRenderer.GetComponent<RectTransform> ().rect;
+			var halfHeight = allyList.rect.height / 2;
+			allyRenderer.transform.localPosition = new Vector3 (
+				Random.Range (-allyList.rect.width + (rect.width / 2), -(rect.width / 2)), 
+				Random.Range (-halfHeight + (rect.height / 2), halfHeight - (rect.height / 2)), 
+				0
+			);
 		}
 	}
 
@@ -244,7 +282,7 @@ public class GameController : MonoBehaviour {
 		return organsAllies [organ.id].Where (x => x is T).Count ();
 	}
 
-	public void StartExternalCoroutine(IEnumerator enumerator) {
+	public void StartExternalCoroutine (IEnumerator enumerator) {
 		StartCoroutine (enumerator);
 	}
 }
