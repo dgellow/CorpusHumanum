@@ -69,6 +69,7 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	}
 
 	public void ReactToBeingHurt (int amount) {
+		GameController.gameState.damageParticleSystem.Emit (1);
 		healthPoints -= amount;
 		if (healthPoints <= minHealthPoints) {
 			healthPoints = minHealthPoints;
@@ -83,6 +84,7 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 		if (healthPoints > maxHealthPoints) {
 			healthPoints = maxHealthPoints;
 		}
+		GameController.gameState.healParticleSystem.Emit (1);
 	}
 
 	void Die() {

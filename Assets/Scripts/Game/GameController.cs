@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour {
 	public float alliesScaleFactor = 0.3f;
 	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
+	public ParticleSystem healParticleSystem;
+	public ParticleSystem damageParticleSystem;
 
 	public int bcellLifespan = 180;
 	public int bcellWeakLifespan = 60;
