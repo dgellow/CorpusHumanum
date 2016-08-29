@@ -18,7 +18,6 @@ public interface ICanAttack {
 }
 
 public interface ICanBeAttacked {
-	void ReactToBeingHurt ();
 	void ReactToBeingHurt (int amount);
 }
 
@@ -33,12 +32,32 @@ public interface IHasLifespan {
 public class Enemy: ICanAttack, ICanBeAttacked {
 	public UnitStatus status = UnitStatus.Good;
 	public int damages = 1;
+	public int maxHP;
+	private int currentHP;
 	public UnitTier tier;
 	public Organ target;
 
 	public Enemy (Organ target, UnitTier tier) {
 		this.tier = tier;
 		this.target = target;
+		maxHP = hpforUnitTier (tier);
+		currentHP = maxHP;
+	}
+
+	private int hpforUnitTier(UnitTier tier) {
+		switch (tier) {
+		case UnitTier.None:
+			return 10;
+		case UnitTier.Triangle:
+			return 50;
+		case UnitTier.Square:
+			return 80;
+		case UnitTier.Octogon:
+			return 150;
+		case UnitTier.Circle:
+			return 300;
+		}
+		return 0;
 	}
 		
 	#region ICanAttack implementation
@@ -60,7 +79,13 @@ public class Enemy: ICanAttack, ICanBeAttacked {
 	}
 
 	public void ReactToBeingHurt (int amount) {
-		ReactToBeingHurt ();
+		currentHP -= amount;
+		if ((float)currentHP / (float)maxHP < 0.25) { 
+			status = UnitStatus.Weakened;
+		}
+		if (currentHP <= 0) {
+			status = UnitStatus.Dead;
+		}
 	}
 
 	#endregion
@@ -96,6 +121,8 @@ abstract public class Ally : IHasLifespan {
 }
 
 class Macrophage: Ally, ICanAttack, ICanBeAttacked {
+	public const int maxHP = 11;
+	public int currentHP = maxHP;
 
 	public Macrophage() {
 		this.lifespan = GameController.gameState.macrophageLifespan;
@@ -109,7 +136,7 @@ class Macrophage: Ally, ICanAttack, ICanBeAttacked {
 		if (enemies.Count > 0) {
 			var target = enemies [0];
 			if (target != null && target.status != UnitStatus.Dead) {
-				target.ReactToBeingHurt ();	
+				target.ReactToBeingHurt (1);	
 			}
 		}
 	}
@@ -127,9 +154,14 @@ class Macrophage: Ally, ICanAttack, ICanBeAttacked {
 	}
 
 	public void ReactToBeingHurt (int amount) {
-		ReactToBeingHurt ();
+		currentHP -= amount;
+		if (currentHP < 3) { 
+			status = UnitStatus.Weakened;
+		}
+		if (currentHP <= 0) {
+			status = UnitStatus.Dead;
+		}
 	}
-
 	#endregion
 }
 
@@ -150,12 +182,12 @@ public class Neutrophil: Ally, ICanBehaveInCombat {
 			// Attack random enemy
 			if (enemies.Count > 0) {
 				var e = enemies.GetRandomValue ();
-				e.ReactToBeingHurt ();
+				e.ReactToBeingHurt (10);
 			}
 			// Attack random ally
 			if (allies.Count > 0) {
 				var a = allies.OfType<ICanBeAttacked> ().ToList ().GetRandomValue ();
-				a.ReactToBeingHurt ();
+				a.ReactToBeingHurt (10);
 			}
 		}
 		// Commit suicide
@@ -179,7 +211,7 @@ public class Killer: Ally, ICanAttack {
 			var naturalEnemies = enemies.Where (x => strongAgainst.Contains (x.tier)).ToList ();
 			var target = naturalEnemies.Count > 0 ? naturalEnemies.GetRandomValue () : enemies.GetRandomValue ();
 			while (target.status != UnitStatus.Dead) {
-				target.ReactToBeingHurt ();
+				target.ReactToBeingHurt (10);
 			}
 		}
 	}
