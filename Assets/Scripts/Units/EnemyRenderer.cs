@@ -18,7 +18,7 @@ public class EnemyRenderer : MonoBehaviour {
 			return;
 		}
 
-		gameObject.SetActive (GameController.gameState.selectedOrgan.id == enemy.target.id);
+		spriteRenderer.enabled = GameController.gameState.selectedOrgan.id == enemy.target.id;
 
 		if (enemy.status == UnitStatus.Dead) {
 			StartCoroutine (PlayDeath ());	

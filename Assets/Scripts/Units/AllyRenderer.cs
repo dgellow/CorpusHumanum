@@ -18,7 +18,7 @@ public class AllyRenderer : MonoBehaviour {
 			return;
 		}
 
-		gameObject.SetActive (GameController.gameState.selectedOrgan.id == ally.organAttachedTo.id);
+		spriteRenderer.enabled = GameController.gameState.selectedOrgan.id == ally.organAttachedTo.id;
 
 		if (ally.status == UnitStatus.Dead) {
 			StartCoroutine (PlayDeath ());	
