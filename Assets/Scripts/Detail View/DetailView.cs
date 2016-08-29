@@ -16,6 +16,7 @@ public class DetailView : MonoBehaviour {
 	public Text allyCount;
 
 	public void Render() {
+
 		var organ = GameController.gameState.selectedOrgan;
 		if (organ != null) {
 			organNameText.text = organ.name;
