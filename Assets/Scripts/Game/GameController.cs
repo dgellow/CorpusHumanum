@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
+[System.Serializable]
 public class GameController : MonoBehaviour {
 	public static GameController gameState;
 	public Organ[] organs;
@@ -31,6 +33,7 @@ public class GameController : MonoBehaviour {
 			for (var i = 0; i < organs.Length; i++) {
 				organs [i].id = i;
 				organsAllies [i] = new List<Ally> ();
+				organsEnemies [i] = new List<Enemy> ();
 			}
 		} else if (gameState != this) {
 			Destroy (gameState);
@@ -178,6 +181,11 @@ public class GameController : MonoBehaviour {
 
 	public int CountAllies (Organ organ) {
 		return organsAllies [organ.id].Count;
+	}
+
+	public int CountAllies <T> (Organ organ) where T: Ally {
+		var allies = organsAllies [organ.id];
+		return allies.Where (x => x is T).Count ();
 	}
 
 	public void StartExternalCoroutine(IEnumerator enumerator) {

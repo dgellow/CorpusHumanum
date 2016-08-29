@@ -16,8 +16,25 @@ public class Level1Scenario : MonoBehaviour, IScenario {
 			throw new MissingReferenceException ("Cannot find heart organ");
 		}
 
-		GameController.gameState.GenerateAllies <Macrophage> (heart, 4);
-		GameController.gameState.GenerateEnemies (heart, UnitTier.Triangle, ennemiesFirstWaveBrain);
+		GameController.gameState.GenerateAllies <Macrophage> (heart, 1);
+		GameController.gameState.GenerateAllies <Neutrophil> (heart, 2);
+		GameController.gameState.GenerateAllies <Helper> (heart, 3);
+		GameController.gameState.GenerateAllies <Killer> (heart, 4);
+
+		yield return new WaitForSeconds (5);
+
+		GameController.gameState.GenerateAllies <Macrophage> (heart, 10);
+		GameController.gameState.GenerateAllies <Neutrophil> (heart, 10);
+		GameController.gameState.GenerateAllies <Helper> (heart, 10);
+		GameController.gameState.GenerateAllies <Killer> (heart, 10);
+
+		yield return new WaitForSeconds (10);
+
+		GameController.gameState.GenerateAllies <Macrophage> (heart, 100);
+		GameController.gameState.GenerateAllies <Neutrophil> (heart, 100);
+		GameController.gameState.GenerateAllies <Helper> (heart, 100);
+		GameController.gameState.GenerateAllies <Killer> (heart, 100);
+		//GameController.gameState.GenerateEnemies (heart, UnitTier.Triangle, ennemiesFirstWaveBrain);
 
 		yield break;
 	}

@@ -33,8 +33,18 @@ public class DetailView : MonoBehaviour {
 			healthBarText.color = Color.black;
 			healthBarImage.color = Color.grey;
 		}
-
-		allyCount.text = string.Format ("{0} allies", GameController.gameState.CountAllies (organ));
+			
+		var countMacrophage = GameController.gameState.CountAllies<Macrophage> (organ);
+		var countNeutrophil = GameController.gameState.CountAllies<Neutrophil> (organ);
+		var countKiller = GameController.gameState.CountAllies <Killer> (organ);
+		var countHelper = GameController.gameState.CountAllies <Helper> (organ);
+		allyCount.text = string.Format (
+			@"# Allies
+- Macrophages: {0}
+- Neutrophil: {1}
+- Killer: {2}
+- Helper: {3}
+", countMacrophage, countNeutrophil, countKiller, countHelper);
 		enemyCount.text = string.Format ("{0} enemies", GameController.gameState.CountEnemies (organ));
 	}
 
