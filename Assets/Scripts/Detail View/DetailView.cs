@@ -45,7 +45,20 @@ public class DetailView : MonoBehaviour {
 - Killer: {2}
 - Helper: {3}
 ", countMacrophage, countNeutrophil, countKiller, countHelper);
-		enemyCount.text = string.Format ("{0} enemies", GameController.gameState.CountEnemies (organ));
+
+		var countTotal = GameController.gameState.CountEnemies (organ);
+		var countTriangle = GameController.gameState.CountEnemies (organ, UnitTier.Triangle);
+		var countCircle = GameController.gameState.CountEnemies (organ, UnitTier.Circle);
+		var countSquare = GameController.gameState.CountEnemies (organ, UnitTier.Square);
+		var countOctogon = GameController.gameState.CountEnemies (organ, UnitTier.Octogon);
+		enemyCount.text = string.Format (
+			@"# Enemies
+- Total: {0}
+- Triangle: {1}
+- Circle: {2}
+- Square: {3}
+- Octogon: {4}
+", countTotal, countTriangle, countCircle, countSquare, countOctogon);
 	}
 
 	string HealthPointsToText() {

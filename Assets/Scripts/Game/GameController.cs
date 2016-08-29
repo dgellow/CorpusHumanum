@@ -146,19 +146,19 @@ public class GameController : MonoBehaviour {
 
 	public void GenerateRandomEnemies (Organ target, int number = 1) {
 		for (var i = 0; i < number; i++) {
-			var type = UnitTier.Triangle; // <== FIXME Instead, randomize enemy type
-			GenerateEnemies (target, type, 1);	
+			var tier = (UnitTier)Random.Range (1, System.Enum.GetValues (typeof(UnitTier)).Length);
+			GenerateEnemies (target, tier, 1);	
 		}
-
-		throw new System.NotImplementedException (); // <== FIXME Prove that you read comments, remove this!
 	}
 
-	public void GenerateEnemies (Organ target, UnitTier type, int number = 1) {
-		// Hint:
-		// Use Instantiate to generate an object from a prefab
-		//
-
-		throw new System.NotImplementedException ();
+	public void GenerateEnemies (Organ target, UnitTier tier, int number = 1) {
+		
+		var enemies = organsEnemies [target.id];
+		for (var i = 0; i < number; i++) {
+			var enemy = new Enemy (target, tier);
+			enemy.damages = Random.Range (1, 4);
+			enemies.Add (enemy);
+		}
 	}
 		
 	public void GenerateAllies <T> (Organ target, int number = 1) where T: Ally, new() {
@@ -179,13 +179,16 @@ public class GameController : MonoBehaviour {
 		return organsEnemies [organ.id].Count;
 	}
 
+	public int CountEnemies (Organ organ, UnitTier tier) {
+		return organsEnemies [organ.id].Where (x => x.tier == tier).Count ();
+	}
+
 	public int CountAllies (Organ organ) {
 		return organsAllies [organ.id].Count;
 	}
 
 	public int CountAllies <T> (Organ organ) where T: Ally {
-		var allies = organsAllies [organ.id];
-		return allies.Where (x => x is T).Count ();
+		return organsAllies [organ.id].Where (x => x is T).Count ();
 	}
 
 	public void StartExternalCoroutine(IEnumerator enumerator) {
