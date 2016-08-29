@@ -26,7 +26,7 @@ public interface ICanBehaveInCombat {
 }
 
 public interface IHasLifespan {
-	IEnumerator PlayLifespan ();
+	void PlayLifespan (float duration);
 }
 	
 public class Enemy: ICanAttack, ICanBeAttacked {
@@ -65,13 +65,41 @@ public class Enemy: ICanAttack, ICanBeAttacked {
 	#endregion
 }
 
-abstract public class Ally {
+abstract public class Ally : IHasLifespan {
 	public UnitStatus status = UnitStatus.Good;
 	public List<UnitTier> strongAgainst;
 	public Organ organAttachedTo;
+	public float lifespan;
+	public float weakenedLifespan;
+
+	public void updateStatus (UnitStatus previousState) {
+
+		Debug.Log ("updating status from lifespan");
+		switch (previousState) {
+		case UnitStatus.Good:
+			this.status = UnitStatus.Weakened;
+			this.lifespan = this.weakenedLifespan;
+			return;
+		case UnitStatus.Weakened:
+			this.status = UnitStatus.Dead;
+			return;
+		}
+	}
+
+	public void PlayLifespan (float duration) {
+		lifespan -= duration;
+		if (lifespan < 0) {
+			this.updateStatus (status);
+		}
+	}
 }
 
 class Macrophage: Ally, ICanAttack, ICanBeAttacked {
+
+	public Macrophage() {
+		this.lifespan = GameController.gameState.macrophageLifespan;
+		this.weakenedLifespan = GameController.gameState.macrophageWeakLifespan;
+	}
 
 	#region ICanAttack implementation
 
@@ -103,7 +131,12 @@ class Macrophage: Ally, ICanAttack, ICanBeAttacked {
 
 public class Neutrophil: Ally, ICanBehaveInCombat {
 
-	#region ICanBehaveInCombat implementation
+	public Neutrophil() {
+
+		this.lifespan = GameController.gameState.neutrophilLifespan;
+		this.weakenedLifespan = GameController.gameState.neutrophilWeakLifespan;
+	}
+	#	region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
 		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
 		var allies = GameController.gameState.organsAllies [organAttachedTo.id];
@@ -123,6 +156,10 @@ public class Neutrophil: Ally, ICanBehaveInCombat {
 
 public class Killer: Ally, ICanAttack {
 
+	public Killer () {
+		this.lifespan = GameController.gameState.killerLifespan;
+		this.weakenedLifespan = GameController.gameState.killerWeakLifespan;
+	}
 	#region ICanAttack implementation
 	public void Hurt () {
 		var target = GameController.gameState.organsEnemies [organAttachedTo.id][0];
@@ -136,6 +173,11 @@ public class Killer: Ally, ICanAttack {
 public class Helper: Ally, ICanBehaveInCombat {
 	private int healDelay = 10;
 	private bool canHeal = true;
+
+	public Helper () {
+		this.lifespan = GameController.gameState.helperLifespan;
+		this.weakenedLifespan = GameController.gameState.helperWeakLifespan;
+	}
 
 	#region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
@@ -157,6 +199,10 @@ public class Helper: Ally, ICanBehaveInCombat {
 
 public class BCell: Ally, ICanBehaveInCombat {
 
+	public BCell() {
+		this.lifespan = GameController.gameState.bcellLifespan;
+		this.weakenedLifespan = GameController.gameState.bcellWeakLifespan;
+	}
 	#region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
 		throw new System.NotImplementedException ();

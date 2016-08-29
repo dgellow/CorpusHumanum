@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour {
 	public Organ selectedOrgan;
 	public float incomeRate = 1.2f;
 	public float combatDelay = 2f;
+	public float lifetimeDelay = 2f;
 	public int incomeAmount = 5;
 	public int maxIncome = 1000;
 	public int minIncome = 0;
@@ -21,6 +22,17 @@ public class GameController : MonoBehaviour {
 	public float alliesScaleFactor = 0.3f;
 	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
+
+	public int bcellLifespan = 180;
+	public int bcellWeakLifespan = 60;
+	public int helperLifespan = 300;
+	public int helperWeakLifespan = 0;
+	public int macrophageLifespan = 120;
+	public int macrophageWeakLifespan = 30;
+	public int neutrophilLifespan = 30;
+	public int neutrophilWeakLifespan = 0;
+	public int killerLifespan = 120;
+	public int killerWeakLifespan = 30;
 
 	void Awake () {
 		if (gameState == null) {
@@ -66,7 +78,7 @@ public class GameController : MonoBehaviour {
 		if (currentScenario != null) {
 			StartCoroutine (currentScenario.Play ());
 		}
-
+		StartCoroutine (UpdateLifetimes ());
 		StartCoroutine (CombatUpdate ());
 		StartCoroutine (IncomeGenerator ());
 	}
@@ -103,6 +115,19 @@ public class GameController : MonoBehaviour {
 			return false;
 		}
 		return true;
+	}
+
+	IEnumerator UpdateLifetimes () {
+		while (true) {
+			Debug.Log ("aging cells");
+
+			foreach (var ls in organsAllies) {
+				foreach (var o in ls) {
+					o.PlayLifespan (lifetimeDelay);
+				}
+			}
+			yield return new WaitForSeconds (lifetimeDelay);
+		}
 	}
 
 	IEnumerator CombatUpdate () {
