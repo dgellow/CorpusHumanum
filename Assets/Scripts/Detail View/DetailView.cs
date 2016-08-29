@@ -34,31 +34,36 @@ public class DetailView : MonoBehaviour {
 			healthBarImage.color = Color.grey;
 		}
 			
-		var countMacrophage = GameController.gameState.CountAllies<Macrophage> (organ);
-		var countNeutrophil = GameController.gameState.CountAllies<Neutrophil> (organ);
-		var countKiller = GameController.gameState.CountAllies <Killer> (organ);
-		var countHelper = GameController.gameState.CountAllies <Helper> (organ);
-		allyCount.text = string.Format (
-			@"# Allies
+		if (organ.isBeingCollected) {
+			var countMacrophage = GameController.gameState.CountAllies<Macrophage> (organ);
+			var countNeutrophil = GameController.gameState.CountAllies<Neutrophil> (organ);
+			var countKiller = GameController.gameState.CountAllies <Killer> (organ);
+			var countHelper = GameController.gameState.CountAllies <Helper> (organ);
+			allyCount.text = string.Format (
+				@"# Allies
 - Macrophages: {0}
 - Neutrophil: {1}
 - Killer: {2}
 - Helper: {3}
 ", countMacrophage, countNeutrophil, countKiller, countHelper);
 
-		var countTotal = GameController.gameState.CountEnemies (organ);
-		var countTriangle = GameController.gameState.CountEnemies (organ, UnitTier.Triangle);
-		var countCircle = GameController.gameState.CountEnemies (organ, UnitTier.Circle);
-		var countSquare = GameController.gameState.CountEnemies (organ, UnitTier.Square);
-		var countOctogon = GameController.gameState.CountEnemies (organ, UnitTier.Octogon);
-		enemyCount.text = string.Format (
-			@"# Enemies
+			var countTotal = GameController.gameState.CountEnemies (organ);
+			var countTriangle = GameController.gameState.CountEnemies (organ, UnitTier.Triangle);
+			var countCircle = GameController.gameState.CountEnemies (organ, UnitTier.Circle);
+			var countSquare = GameController.gameState.CountEnemies (organ, UnitTier.Square);
+			var countOctogon = GameController.gameState.CountEnemies (organ, UnitTier.Octogon);
+			enemyCount.text = string.Format (
+				@"# Enemies
 - Total: {0}
 - Triangle: {1}
 - Circle: {2}
 - Square: {3}
 - Octogon: {4}
 ", countTotal, countTriangle, countCircle, countSquare, countOctogon);
+		} else {
+			allyCount.text = "";
+			enemyCount.text = "";
+		}
 	}
 
 	string HealthPointsToText() {

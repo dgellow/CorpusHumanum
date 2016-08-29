@@ -13,7 +13,9 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	public Image image;
 	public int healthPoints = 100;
 	public bool isBeingScanned = false;
+	public bool isBeingCollected = false;
 	public int countDownScan;
+	public int countDownCollect;
 
 	private int maxHealthPoints;
 	private int minHealthPoints = 0;
@@ -89,5 +91,14 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 			countDownScan = i;
 		}
 		isBeingScanned = false;
+	}
+
+	public IEnumerator PlayCollect() {
+		isBeingCollected = true;
+		for (var i = GameController.gameState.collectDelay; i >= 0; i--) {
+			yield return new WaitForSeconds (1);
+			countDownCollect = i;
+		}
+		isBeingCollected = false;
 	}
 }

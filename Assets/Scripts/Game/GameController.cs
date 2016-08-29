@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour {
 	public bool generateIncome = true;
 	public int incomeReserve = 0;
 	public int scanDelay = 10;
+	public int collectDelay = 10;
 	public float alliesScaleFactor = 0.3f;
 	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
