@@ -33,7 +33,7 @@ public class TierUnitRenderer : MonoBehaviour {
 		case UnitTier.Octogon:
 			return octogonLogo;
 		default:
-			throw new System.ArgumentOutOfRangeException ();
+			return null;
 		}
 	}
 }

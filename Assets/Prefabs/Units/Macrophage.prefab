@@ -18,8 +18,9 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000011596364454}
+  - 224: {fileID: 224000013511647918}
   - 212: {fileID: 212000012416794212}
+  - 114: {fileID: 114000011154331570}
   m_Layer: 0
   m_Name: Macrophage
   m_TagString: Untagged
@@ -27,19 +28,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000011596364454
-Transform:
+--- !u!114 &114000011154331570
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012600627284}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.52, y: 7.51, z: 83.36068}
-  m_LocalScale: {x: 0.11901763, y: 0.11901763, z: 0.11901763}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ac0820436cc48d2bdd28fee374bae3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathDuration: 2
+  deathSprite: {fileID: 0}
 --- !u!212 &212000012416794212
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -73,3 +74,21 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!224 &224000013511647918
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012600627284}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 83.36068}
+  m_LocalScale: {x: 0.11901763, y: 0.11901763, z: 0.11901763}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1.52, y: 7.51}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
