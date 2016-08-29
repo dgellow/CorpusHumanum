@@ -143,7 +143,7 @@ public class GameController : MonoBehaviour {
 
 	public void GenerateRandomEnemies (Organ target, int number = 1) {
 		for (var i = 0; i < number; i++) {
-			var type = UnitTier.SomethingElse; // <== FIXME Instead, randomize enemy type
+			var type = UnitTier.Triangle; // <== FIXME Instead, randomize enemy type
 			GenerateEnemies (target, type, 1);	
 		}
 
@@ -159,9 +159,14 @@ public class GameController : MonoBehaviour {
 	}
 		
 	public void GenerateAllies <T> (Organ target, int number = 1) where T: Ally, new() {
+		GenerateAllies<T> (target, null, number);
+	}
+
+	public void GenerateAllies <T> (Organ target, List<UnitTier> strongAgainst , int number = 1) where T: Ally, new() {
 		var allies = organsAllies [target.id];
 		for (var i = 0; i < number; i++) {
 			var ally = new T ();
+			ally.strongAgainst = strongAgainst;
 			ally.organAttachedTo = target;
 			allies.Add (ally);
 		}

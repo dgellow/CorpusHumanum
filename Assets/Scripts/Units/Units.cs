@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public enum UnitStatus { Good, Weakened, Dead }
 
 public enum UnitTier {
+	None,
 	Triangle,
 	Circle,
 	Square,
-	Octogon,
-	SomethingElse
+	Octogon
 }
 
 public interface ICanAttack {

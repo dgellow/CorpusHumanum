@@ -3,20 +3,10 @@ using System.Collections;
 
 public class ActionAddNeutrophil : MonoBehaviour, IPlayerAction {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	#region IPlayerAction implementation
 
 	public void Use () {
-		throw new System.NotImplementedException ();
+		GameController.gameState.GenerateAllies<Neutrophil> (GameController.gameState.selectedOrgan);
 	}
 
 	#endregion
