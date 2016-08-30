@@ -7,11 +7,11 @@ PlayerSettings:
   productGUID: 59200113321c549e78ff42a08553c4cf
   AndroidProfiler: 0
   defaultScreenOrientation: 3
-  targetDevice: 1
+  targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: CorpusHumanum
+  companyName: QRC Labs
+  productName: Corpus Humanum
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenStyle: 0
@@ -93,7 +93,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.Company.ProductName
+  bundleIdentifier: moe.qrclabs.corpushumanum
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
@@ -108,7 +108,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 0
+  iPhoneBuildNumber: 1
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0
@@ -179,7 +179,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: a210107ead3a8477ea9dc21228de9d85, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
@@ -204,9 +204,9 @@ PlayerSettings:
   wiiUGamePadStartupScreen: {fileID: 0}
   wiiUProfilerLibPath: 
   actionOnDotNetUnhandledException: 1
-  enableInternalProfiler: 0
+  enableInternalProfiler: 1
   logObjCUncaughtExceptions: 1
-  enableCrashReportAPI: 0
+  enableCrashReportAPI: 1
   locationUsageDescription: 
   XboxTitleId: 
   XboxImageXexPath: 
