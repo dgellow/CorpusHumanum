@@ -98,9 +98,7 @@ abstract public class Ally : IHasLifespan {
 	public float lifespan;
 	public float weakenedLifespan;
 
-	public void updateStatus (UnitStatus previousState) {
-
-		Debug.Log ("updating status from lifespan");
+	public void UpdateStatus (UnitStatus previousState) {
 		switch (previousState) {
 		case UnitStatus.Good:
 			this.status = UnitStatus.Weakened;
@@ -115,7 +113,7 @@ abstract public class Ally : IHasLifespan {
 	public void PlayLifespan (float duration) {
 		lifespan -= duration;
 		if (lifespan < 0) {
-			this.updateStatus (status);
+			this.UpdateStatus (status);
 		}
 	}
 }

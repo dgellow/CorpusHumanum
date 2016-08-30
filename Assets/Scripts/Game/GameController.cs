@@ -70,7 +70,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void StartGameLogic () {
-		Debug.Log ("starting game logic");
+		Debug.Log ("Initialize and start game logic");
 
 		gameUI = FindObjectOfType<GameUI> ();
 		organs = FindObjectsOfType<Organ> ();
@@ -87,9 +87,9 @@ public class GameController : MonoBehaviour {
 		if (currentScenario != null) {
 			currentScenario.Play ();
 		}
+		StartCoroutine (UpdateCombat ());
 		StartCoroutine (UpdateLifetimes ());
-		StartCoroutine (CombatUpdate ());
-		StartCoroutine (IncomeGenerator ());
+		StartCoroutine (UpdateIncome ());
 	}
 
 	public void LoadState () {
@@ -128,7 +128,7 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator UpdateLifetimes () {
 		while (true) {
-			Debug.Log ("aging cells");
+			Debug.Log ("tick UpdateLifetimes");
 
 			foreach (var ls in organsAllies) {
 				foreach (var o in ls) {
@@ -139,9 +139,9 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	IEnumerator CombatUpdate () {
+	IEnumerator UpdateCombat () {
 		while (true) {
-			Debug.Log ("updating combat");
+			Debug.Log ("tick UpdateCombat");
 			foreach (var o in organs) {
 				var allies = organsAllies [o.id];
 				var enemies = organsEnemies [o.id];
@@ -187,11 +187,11 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	IEnumerator IncomeGenerator () {
+	IEnumerator UpdateIncome () {
 		// Infinite loop
 		while (true) {
+			Debug.Log ("tick UpdateIncome");
 			if (generateIncome) {
-				Debug.Log ("Generate income");
 				GiveToIncomeReserve (incomeAmount);
 			}
 			yield return new WaitForSeconds (incomeRate);
