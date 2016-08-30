@@ -25,6 +25,8 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	private int minHealthPoints = 0;
 	private Collider2D collider2D;
 	private GameUI gameUI;
+	private IEnumerator scanRoutine;
+	private IEnumerator collectRoutine;
 
 	void Start () {
 		maxHealthPoints = healthPoints;
@@ -88,23 +90,40 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	}
 
 	void Die() {
-		throw new System.NotImplementedException ();
+		UnityEngine.SceneManagement.SceneManager.LoadScene ("Intro");
+		Destroy (GameController.gameState.gameObject);
 	}
 
-	public IEnumerator PlayScan() {
+	public void Scan() {
+		if (scanRoutine != null) {
+			StopCoroutine (scanRoutine);
+		}
+		scanRoutine = PlayScan ();
+		StartCoroutine (scanRoutine);
+	}
+
+	IEnumerator PlayScan() {
 		isBeingScanned = true;
 		for (var i = GameController.gameState.scanDelay; i >= 0; i--) {
-			yield return new WaitForSeconds (1);
 			countDownScan = i;
+			yield return new WaitForSeconds (1);
 		}
 		isBeingScanned = false;
 	}
 
-	public IEnumerator PlayCollect() {
+	public void Collect() {
+		if (collectRoutine != null) {
+			StopCoroutine (collectRoutine); 
+		}
+		collectRoutine = PlayCollect ();
+		StartCoroutine (collectRoutine);
+	}
+
+	IEnumerator PlayCollect() {
 		isBeingCollected = true;
 		for (var i = GameController.gameState.collectDelay; i >= 0; i--) {
-			yield return new WaitForSeconds (1);
 			countDownCollect = i;
+			yield return new WaitForSeconds (1);
 		}
 		isBeingCollected = false;
 	}

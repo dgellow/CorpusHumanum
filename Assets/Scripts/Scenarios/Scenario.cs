@@ -8,5 +8,5 @@ public enum Scenario {
 }
 
 public interface IScenario {
-	IEnumerator Play ();
+	void Play ();
 }

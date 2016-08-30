@@ -302,12 +302,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b731be4a83f34c6bb1b9c3cea8c4e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 200
+  price: 120
   researchPriceText: {fileID: 114000010724701638}
   researchPriceLogo: {fileID: 114000011327984898}
   researchButton: {fileID: 114000012247680542}
   researchText: {fileID: 114000011801792852}
-  researchDelay: 60
+  researchDelay: 40
   researchRootObject: {fileID: 1000010774977156}
   buyItemRootObject: {fileID: 1000011352034400}
   researched: 0

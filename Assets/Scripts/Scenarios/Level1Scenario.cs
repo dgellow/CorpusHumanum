@@ -6,28 +6,34 @@ public class Level1Scenario : MonoBehaviour, IScenario {
 
 	public int ennemiesFirstWaveBrain = 50;
 
+	public void Play() {
+		StartCoroutine (PlayRandomEnemies ());
+		StartCoroutine (PlayScenario ());
+	}
 
-	#region IScenario implementation
-
-	public IEnumerator Play () {
+	IEnumerator PlayScenario () {
 		Debug.Log ("Starting level 1");
 		var heart = FindObjectOfType<OrganHeart> ().GetComponent<Organ> ();
 		if (heart == null) {
 			throw new MissingReferenceException ("Cannot find heart organ");
 		}
 
-		GameController.gameState.GenerateEnemies (heart, UnitTier.None, 1);
+		GameController.gameState.GenerateRandomEnemies (heart, 1);
 
 		yield return new WaitForSeconds (5);
 
-		GameController.gameState.GenerateEnemies (heart, UnitTier.None, 10);
+		GameController.gameState.GenerateRandomEnemies (heart, 10);
 
 		yield return new WaitForSeconds (20);
 
-		GameController.gameState.GenerateEnemies (heart, UnitTier.None, 30);
-
-		yield break;
+		GameController.gameState.GenerateRandomEnemies (heart, 30);
 	}
 
-	#endregion
+	IEnumerator PlayRandomEnemies() {
+		while (true) {
+			var organ = FindObjectsOfType<Organ> ().GetRandomValue ();
+			GameController.gameState.GenerateRandomEnemies (organ, Random.Range (1, 3));
+			yield return new WaitForSeconds (Random.Range (1, 5));
+		}
+	}
 }

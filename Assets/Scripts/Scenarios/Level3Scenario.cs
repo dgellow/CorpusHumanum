@@ -3,7 +3,15 @@ using System.Collections;
 
 public class Level3Scenario : MonoBehaviour, IScenario {
 
-	public IEnumerator Play () {
+	public void Play() {
+		Debug.Log ("Random enemies");
+		StartCoroutine (PlayRandomEnemies ());
+
+		Debug.Log ("Start scenarios");
+		StartCoroutine (PlayScenario ());
+	}
+
+	IEnumerator PlayScenario () {
 		var heart = FindObjectOfType<OrganHeart> ().GetComponent<Organ> ();
 		var colon = FindObjectOfType<OrganColon> ().GetComponent<Organ> ();
 		if (heart == null || colon == null) {
@@ -29,7 +37,13 @@ public class Level3Scenario : MonoBehaviour, IScenario {
 		Debug.Log ("last wave");
 		GameController.gameState.GenerateEnemies (heart, UnitTier.Triangle, 30);
 		GameController.gameState.GenerateEnemies (colon, UnitTier.None, 30);
+	}
 
-		yield break;
+	IEnumerator PlayRandomEnemies() {
+		while (true) {
+			var organ = FindObjectsOfType<Organ> ().GetRandomValue ();
+			GameController.gameState.GenerateRandomEnemies (organ, Random.Range (1, 3));
+			yield return new WaitForSeconds (Random.Range (1, 5));
+		}
 	}
 }

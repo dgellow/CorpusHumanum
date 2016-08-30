@@ -436,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b731be4a83f34c6bb1b9c3cea8c4e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 150
+  price: 100
   researchPriceText: {fileID: 114000010908576910}
   researchPriceLogo: {fileID: 114000012376359816}
   researchButton: {fileID: 114000013068481158}
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2404c9596394cc1a1595ce5aaabd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 80
+  price: 40
   priceText: {fileID: 114000011370550428}
   buyButton: {fileID: 114000010415001210}
 --- !u!114 &114000014063668016

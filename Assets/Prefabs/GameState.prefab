@@ -77,6 +77,6 @@ MonoBehaviour:
   killerLifespan: 30
   killerWeakLifespan: 20
   neutrophilNbTarget: 5
-  helperHealDelay: 5
+  helperHealDelay: 3
   helperNbTarget: 5
-  helperHealAmount: 10
+  helperHealAmount: 50

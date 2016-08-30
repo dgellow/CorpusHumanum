@@ -26,8 +26,21 @@ public class TierUnitRenderer : MonoBehaviour {
 	}
 
 	void Update() {
-		if (enemyRenderer != null && GameController.gameState.selectedOrgan != null) {
-			tierLogo.enabled = GameController.gameState.selectedOrgan.isBeingCollected;
+		var selectedOrgan = GameController.gameState.selectedOrgan;
+		if (enemyRenderer != null) {
+			if (selectedOrgan != null && selectedOrgan.id == enemyRenderer.enemy.target.id) {
+				tierLogo.enabled = selectedOrgan.isBeingCollected;
+			} else {
+				tierLogo.enabled = false;
+			}
+		}
+
+		if (allyRenderer != null) {
+			if (selectedOrgan != null && selectedOrgan.id == allyRenderer.ally.organAttachedTo.id) {
+				tierLogo.enabled = true;
+			} else {
+				tierLogo.enabled = false;
+			}
 		}
 	}
 

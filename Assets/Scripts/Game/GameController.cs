@@ -83,9 +83,9 @@ public class GameController : MonoBehaviour {
 		}
 
 		//can't put this in Initialize since it's never called when we don't start from main menu
-		IScenario currentScenario = scenarioForSelection (selectedScenario);
+		var currentScenario = scenarioForSelection (selectedScenario);
 		if (currentScenario != null) {
-			StartCoroutine (currentScenario.Play ());
+			currentScenario.Play ();
 		}
 		StartCoroutine (UpdateLifetimes ());
 		StartCoroutine (CombatUpdate ());

@@ -46,7 +46,7 @@ public class GameUI : MonoBehaviour {
 		Debug.Log ("Save state");
 		GameController.gameState.SaveState ();
 		Debug.Log ("Back to main menu");
-		SceneManager.LoadScene (mainMenuScene);
+		SceneManager.LoadScene ("Intro");
 	}
 
 	public void ShowDetailView() {
