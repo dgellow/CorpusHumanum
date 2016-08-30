@@ -61,36 +61,22 @@ MonoBehaviour:
   minIncome: 0
   generateIncome: 1
   incomeReserve: 0
-  scanDelay: 6000
+  scanDelay: 60
   collectDelay: 60
   alliesScaleFactor: 0.3
   enemiesScaleFactor: 0.3
   selectedScenario: 0
-  healParticleSystem: {fileID: 0}
-  damageParticleSystem: {fileID: 0}
-  allyList: {fileID: 0}
-  enemyList: {fileID: 0}
-  enemyPrefab: {fileID: 1000010569662234, guid: 961f96ba273fc449eab7b69301d3226f,
-    type: 2}
-  macrophagePrefab: {fileID: 1000012600627284, guid: 8d39c0db057c541428ff18ef1ec5b9d7,
-    type: 2}
-  neutrophilPrefab: {fileID: 1000010776578466, guid: 01a8e43a9ea5642aa90d004593876bce,
-    type: 2}
-  helperPrefab: {fileID: 1000012290963830, guid: e69078588c221488aafd03c8c26b9ee3,
-    type: 2}
-  killerPrefab: {fileID: 1000011589418344, guid: 7231f166575554096922deaf1341c9be,
-    type: 2}
   bcellLifespan: 180
   bcellWeakLifespan: 60
-  helperLifespan: 300
+  helperLifespan: 100
   helperWeakLifespan: 0
-  macrophageLifespan: 120
-  macrophageWeakLifespan: 30
-  neutrophilLifespan: 30
+  macrophageLifespan: 20
+  macrophageWeakLifespan: 10
+  neutrophilLifespan: 10
   neutrophilWeakLifespan: 0
-  killerLifespan: 120
-  killerWeakLifespan: 30
+  killerLifespan: 30
+  killerWeakLifespan: 20
   neutrophilNbTarget: 5
-  helperHealDelay: 10
+  helperHealDelay: 5
   helperNbTarget: 5
   helperHealAmount: 10
