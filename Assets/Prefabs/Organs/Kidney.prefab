@@ -124,7 +124,7 @@ MonoBehaviour:
   isSelecting: 0
   image: {fileID: 0}
   backgroundImage: {fileID: 21300000, guid: d0a58cd98f0894762b3f4d5c83c5e45f, type: 3}
-  healthPoints: 1000
+  healthPoints: 5000
   isBeingScanned: 0
   isBeingCollected: 0
   countDownScan: 0

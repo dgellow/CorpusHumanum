@@ -176,19 +176,23 @@ public class Neutrophil: Ally, ICanBehaveInCombat {
 	#region ICanBehaveInCombat implementation
 	public void CombatBehaviour () {
 		var nbTarget = GameController.gameState.neutrophilNbTarget;
-		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id];
-		var allies = GameController.gameState.organsAllies [organAttachedTo.id];
+		var enemies = GameController.gameState.organsEnemies [organAttachedTo.id].OfType<ICanBeAttacked> ().ToList ();
+		var allies = GameController.gameState.organsAllies [organAttachedTo.id].OfType<ICanBeAttacked> ().ToList ();
 		for (var i = 0; i < nbTarget; i++) {
 			// Attack random enemy
 			if (enemies.Count > 0) {
 				var e = enemies.GetRandomValue ();
-				e.ReactToBeingHurt (10);
+				e.ReactToBeingHurt (100);
 			}
+
 			// Attack random ally
 			if (allies.Count > 0) {
 				var a = allies.OfType<ICanBeAttacked> ().ToList ().GetRandomValue ();
 				a.ReactToBeingHurt (10);
 			}
+
+			// Attack organ
+			organAttachedTo.ReactToBeingHurt (10);
 		}
 		// Commit suicide
 		status = UnitStatus.Dead;
