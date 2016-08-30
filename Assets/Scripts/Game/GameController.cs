@@ -23,16 +23,6 @@ public class GameController : MonoBehaviour {
 	public float alliesScaleFactor = 0.3f;
 	public float enemiesScaleFactor = 0.3f;
 	public Scenario selectedScenario;
-	public ParticleSystem healParticleSystem;
-	public ParticleSystem damageParticleSystem;
-
-	public RectTransform allyList;
-	public RectTransform enemyList;
-	public GameObject enemyPrefab;
-	public GameObject macrophagePrefab;
-	public GameObject neutrophilPrefab;
-	public GameObject helperPrefab;
-	public GameObject killerPrefab;
 
 	public int bcellLifespan = 180;
 	public int bcellWeakLifespan = 60;
@@ -50,19 +40,12 @@ public class GameController : MonoBehaviour {
 	public int helperNbTarget = 5;
 	public int helperHealAmount = 10;
 
+	private GameUI gameUI;
+
 	void Awake () {
 		if (gameState == null) {
 			DontDestroyOnLoad (gameObject);
 			gameState = this;
-
-			organs = FindObjectsOfType<Organ> ();
-			organsEnemies = new List<Enemy>[organs.Length];
-			organsAllies = new List<Ally>[organs.Length];
-			for (var i = 0; i < organs.Length; i++) {
-				organs [i].id = i;
-				organsAllies [i] = new List<Ally> ();
-				organsEnemies [i] = new List<Enemy> ();
-			}
 		} else if (gameState != this) {
 			Destroy (gameState);
 		}
@@ -88,6 +71,16 @@ public class GameController : MonoBehaviour {
 
 	public void StartGameLogic () {
 		Debug.Log ("starting game logic");
+
+		gameUI = FindObjectOfType<GameUI> ();
+		organs = FindObjectsOfType<Organ> ();
+		organsEnemies = new List<Enemy>[organs.Length];
+		organsAllies = new List<Ally>[organs.Length];
+		for (var i = 0; i < organs.Length; i++) {
+			organs [i].id = i;
+			organsAllies [i] = new List<Ally> ();
+			organsEnemies [i] = new List<Enemy> ();
+		}
 
 		//can't put this in Initialize since it's never called when we don't start from main menu
 		IScenario currentScenario = scenarioForSelection (selectedScenario);
@@ -218,16 +211,7 @@ public class GameController : MonoBehaviour {
 			var enemy = new Enemy (target, tier);
 			enemy.damages = Random.Range (1, 4);
 			enemies.Add (enemy);
-			var enemyRenderer = Instantiate<EnemyRenderer> (enemyPrefab.GetComponent<EnemyRenderer> ());
-			enemyRenderer.enemy = enemy;
-			enemyRenderer.transform.SetParent (enemyList.transform, true);
-			var rect = enemyRenderer.GetComponent<RectTransform> ().rect;
-			var halfHeight = enemyList.rect.height / 2;
-			enemyRenderer.transform.localPosition = new Vector3 (
-				Random.Range ((rect.width / 2), enemyList.rect.width - (rect.width / 2)), 
-				Random.Range (-halfHeight + (rect.height / 2), halfHeight - (rect.height / 2)), 
-				0
-			);
+			gameUI.DrawEnemy (enemy);
 		}
 	}
 
@@ -241,28 +225,8 @@ public class GameController : MonoBehaviour {
 			var ally = new T ();
 			ally.strongAgainst = strongAgainst;
 			ally.organAttachedTo = target;
-			allies.Add (ally);			
-
-			GameObject prefab = null;
-			if (typeof(T) == typeof(Macrophage)) {
-				prefab = macrophagePrefab;
-			} else if (typeof(T) == typeof(Neutrophil)) {
-				prefab = neutrophilPrefab;
-			} else if (typeof(T) == typeof(Helper)) {
-				prefab = helperPrefab;
-			} else if (typeof(T) == typeof(Killer)) {
-				prefab = killerPrefab;
-			}
-			var allyRenderer = Instantiate<AllyRenderer> (prefab.GetComponent<AllyRenderer> ());
-			allyRenderer.ally = ally;
-			allyRenderer.transform.SetParent (allyList.transform, true);
-			var rect = allyRenderer.GetComponent<RectTransform> ().rect;
-			var halfHeight = allyList.rect.height / 2;
-			allyRenderer.transform.localPosition = new Vector3 (
-				Random.Range (-allyList.rect.width + (rect.width / 2), -(rect.width / 2)), 
-				Random.Range (-halfHeight + (rect.height / 2), halfHeight - (rect.height / 2)), 
-				0
-			);
+			allies.Add (ally);		
+			gameUI.DrawAlly<T> (ally);
 		}
 	}
 

@@ -40,4 +40,21 @@ public class MainMenu : MonoBehaviour {
 		Debug.Log ("Apply settings");
 		settingsPanel.transform.localPosition = settingsPanelOriginalPosition;
 	}
+
+	void LoadLevel(Scenario scenario)  {
+		GameController.gameState.selectedScenario = scenario;
+		SceneManager.LoadScene (gameScene);
+	}
+
+	public void LoadLevel1() {
+		LoadLevel (Scenario.Level1);
+	}
+		
+	public void LoadLevel2() {
+		LoadLevel (Scenario.Level2);
+	}
+		
+	public void LoadLevel3() {
+		LoadLevel (Scenario.Level3);
+	}
 }
