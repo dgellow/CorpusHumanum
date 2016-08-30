@@ -9,16 +9,25 @@ public class TierUnitRenderer : MonoBehaviour {
 	public Sprite circleLogo;
 	public Sprite octogonLogo;
 
+	private EnemyRenderer enemyRenderer;
+	private AllyRenderer allyRenderer;
+
 	// Use this for initialization
 	void Start () {
-		var enemyRenderer = GetComponent<EnemyRenderer> ();
+		enemyRenderer = GetComponent<EnemyRenderer> ();
 		if (enemyRenderer != null) {
 			tierLogo.sprite = TierToLogo (enemyRenderer.enemy.tier);
 		}
 
-		var allyRenderer = GetComponent<AllyRenderer> ();
+		allyRenderer = GetComponent<AllyRenderer> ();
 		if (allyRenderer != null) {
 			tierLogo.sprite = TierToLogo (allyRenderer.ally.strongAgainst[0]);
+		}
+	}
+
+	void Update() {
+		if (enemyRenderer != null) {
+			tierLogo.enabled = GameController.gameState.selectedOrgan.isBeingCollected;
 		}
 	}
 

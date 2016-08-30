@@ -14,12 +14,12 @@ public class EnemyRenderer : MonoBehaviour {
 	}
 
 	void Update() {
-		if (GameController.gameState.selectedOrgan == null) {
+		var selectedOrgan = GameController.gameState.selectedOrgan;
+		if (selectedOrgan == null) {
 			return;
 		}
 
-		spriteRenderer.enabled = GameController.gameState.selectedOrgan.id == enemy.target.id;
-
+		spriteRenderer.enabled = selectedOrgan.id == enemy.target.id;
 		if (enemy.status == UnitStatus.Dead) {
 			StartCoroutine (PlayDeath ());	
 		}
