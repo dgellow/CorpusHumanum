@@ -26,7 +26,7 @@ public class TierUnitRenderer : MonoBehaviour {
 	}
 
 	void Update() {
-		if (enemyRenderer != null) {
+		if (enemyRenderer != null && GameController.gameState.selectedOrgan != null) {
 			tierLogo.enabled = GameController.gameState.selectedOrgan.isBeingCollected;
 		}
 	}

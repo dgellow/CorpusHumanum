@@ -6,6 +6,8 @@ public class EnemyRenderer : MonoBehaviour {
 	public Enemy enemy;
 	public float deathDuration = 2f;
 	public Sprite deathSprite;
+	public ParticleSystem particleSystem;
+	public int deathNbParticle = 4;
 
 	private SpriteRenderer spriteRenderer;
 
@@ -26,7 +28,7 @@ public class EnemyRenderer : MonoBehaviour {
 	}
 
 	IEnumerator PlayDeath() {
-		spriteRenderer.sprite = deathSprite;
+		particleSystem.Emit (deathNbParticle);
 		yield return new WaitForSeconds (deathDuration);
 		Destroy (gameObject);
 	}
