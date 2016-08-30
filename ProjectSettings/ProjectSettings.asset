@@ -119,7 +119,7 @@ PlayerSettings:
     serializedVersion: 2
     m_Bits: 238
   iPhoneSdkVersion: 988
-  iPhoneTargetOSVersion: 24
+  iPhoneTargetOSVersion: 38
   tvOSSdkVersion: 0
   tvOSTargetOSVersion: 900
   uIPrerenderedIcon: 0
@@ -415,7 +415,7 @@ PlayerSettings:
   - iOS::ScriptingBackend
   Standalone::ScriptingBackend: 0
   WebPlayer::ScriptingBackend: 0
-  iOS::Architecture: 0
+  iOS::Architecture: 2
   iOS::ScriptingBackend: 1
   boolPropertyNames:
   - Android::VR::enable
