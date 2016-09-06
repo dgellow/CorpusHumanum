@@ -37,22 +37,29 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	}
 		
 	void Update () {
-		// Handle organ selection
-		if (Input.touchCount == 1) {
+		var isSelectingOrgan = false;
+		var selectOrgan = false;
+
+		if (Input.mousePresent) {
+			var point = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			isSelectingOrgan = collider2D.OverlapPoint (point);
+			selectOrgan = isSelecting && Input.GetMouseButtonUp (0);
+		} else if (Input.touchCount == 1) {
 			var touch = Input.GetTouch (0);
 			if (touch.phase == TouchPhase.Began || 
 				touch.phase == TouchPhase.Moved) {
 				var point = Camera.main.ScreenToWorldPoint (touch.position);
-				if (collider2D.OverlapPoint (point)) {
-					foreach (var organ in GameController.gameState.organs) {
-						organ.isSelecting = false;
-					}
-					isSelecting = true;
-				}
+				isSelectingOrgan = collider2D.OverlapPoint (point);
 			} else if (isSelecting && touch.phase == TouchPhase.Ended) {
-				GameController.gameState.selectedOrgan = this;
-				gameUI.ShowDetailView ();
+				selectOrgan = true;
 			}
+		}
+
+		if (isSelectingOrgan) {
+			foreach (var organ in GameController.gameState.organs) {
+				organ.isSelecting = false;
+			}
+			isSelecting = true;
 		}
 			
 		if (isSelecting) {
@@ -61,6 +68,11 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 		} else {
 			image.color = Color.white;
 			image.transform.localScale = new Vector3 (1f, 1f, 1f);
+		}
+
+		if (selectOrgan) {
+			GameController.gameState.selectedOrgan = this;
+			gameUI.ShowDetailView ();
 		}
 	}
 
