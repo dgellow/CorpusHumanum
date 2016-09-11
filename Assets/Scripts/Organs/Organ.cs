@@ -33,7 +33,7 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 		healthMiniBarImage = healthMiniBar.GetComponent<Image> ();
 		image = GetComponent<Image> ();
 		collider2D = GetComponent<Collider2D> ();
-		gameUI = FindObjectOfType<GameUI> ();
+        gameUI = FindObjectOfType<GameUI> ();
 	}
 		
 	void Update () {
@@ -83,7 +83,8 @@ public class Organ : MonoBehaviour, ICanBeAttacked {
 	}
 
 	public void ReactToBeingHurt (int amount) {
-		gameUI.damageParticleSystem.Emit (1);
+        gameUI = FindObjectOfType<GameUI>();
+        gameUI.damageParticleSystem.Emit (1);
 		healthPoints -= amount;
 		if (healthPoints <= minHealthPoints) {
 			healthPoints = minHealthPoints;
